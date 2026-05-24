@@ -56,96 +56,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <button class="chip" onclick="ask('What business expenses can I deduct? Give me a full list.')">What can I deduct?</button>
   <button class="chip" onclick="ask('Do I need to charge VAT on my sales?')">Do I need VAT?</button>
   <button class="chip" onclick="ask('What percentage of profit should I set aside for taxes and why?')">How much to set aside?</button>
-  <button class="chip" onclick="ask('What do I need to file for my Steuererklärung and when?')">Steuererklärung help</button>
+  <button class="chip" onclick="ask('What do I need to file for my Steuererklaerung and when?')">Steuererklaerung help</button>
 </div>
 <div id="bottom">
   <textarea id="user-input" placeholder="Ask anything about your German taxes..." rows="1"></textarea>
   <button id="send-btn" onclick="sendMsg()">Send</button>
 </div>
 <script>
-const msgsEl=document.getElementById('messages');
-const inputEl=document.getElementById('user-input');
-const sendBtn=document.getElementById('send-btn');
-const incomeIn=document.getElementById('income-in');
-const expenseIn=document.getElementById('expense-in');
-let history=[];
-let showSugg=true;
+var msgsEl=document.getElementById('messages');
+var inputEl=document.getElementById('user-input');
+var sendBtn=document.getElementById('send-btn');
+var incomeIn=document.getElementById('income-in');
+var expenseIn=document.getElementById('expense-in');
+var history=[];
+var showSugg=true;
 
-function fmt(n){return'€'+Number(n).toLocaleString('de-DE');}
+function fmt(n){return'EUR '+Number(n).toLocaleString('de-DE');}
 function updateData(){
-  const i=parseFloat(incomeIn.value)||0;
-  const e=parseFloat(expenseIn.value)||0;
+  var i=parseFloat(incomeIn.value)||0;
+  var e=parseFloat(expenseIn.value)||0;
   document.getElementById('d-income').textContent=fmt(i);
-  document.getElementById('d-expenses').textContent=fmt(e);
-  document.getElementById('profit-val').textContent=fmt(i-e);
-}
-incomeIn.addEventListener('input',updateData);
-expenseIn.addEventListener('input',updateData);
-
-function getSystem(){
-  const i=parseFloat(incomeIn.value)||0;
-  const e=parseFloat(expenseIn.value)||0;
-  const p=i-e;
-  return`You are an expert AI tax assistant specialising in German tax law for small business owners and side income earners (Nebenerwerb). You are thorough, friendly, and give detailed practical answers.\n\nUser financial data:\n- Gross income: €${i.toFixed(2)}\n- Expenses: €${e.toFixed(2)}\n- Net profit: €${p.toFixed(2)}\n\nKEY GERMAN TAX KNOWLEDGE:\n\nKLEINUNTERNEHMER (§19 UStG):\n- Under €22,000 prior year revenue AND expected under €50,000 current year → Kleinunternehmer → no VAT required\n- Must write "Gemäß §19 UStG wird keine Umsatzsteuer erhoben" on invoices\n- Can opt into VAT voluntarily to reclaim input VAT\n\nVAT (Umsatzsteuer):\n- Standard 19%, reduced 7% (books, food, some art)\n- Over threshold: register, file Umsatzsteuervoranmeldung, annual Umsatzsteuererklärung\n- EU digital services: OSS One Stop Shop may apply\n\nINCOME TAX:\n- Grundfreibetrag 2024: €11,784 tax-free\n- 14% starting rate, rising to 42% at ~€66,761, 45% above €277,826\n- Side income adds to employment income — marginal rate matters\n- Solidaritätszuschlag above ~€18,130 tax liability\n\nGEWERBESTEUER:\n- Applies to Gewerbebetrieb (online product sellers = Gewerbe)\n- Individual Freibetrag: €24,500\n- Effective ~10-15% above threshold, partially offset via §35 EStG\n\nDEDUCTIBLE EXPENSES:\n- Platform fees (Etsy, PayPal, eBay)\n- Shipping and packaging\n- Raw materials and inventory\n- Home office: €6/day flat up to €1,260/year OR proportional room costs\n- Equipment up to €800 net: immediate; above: depreciated\n- Insurance, advertising, professional books, bank fees\n- Business mileage: €0.30/km\n\nFILING:\n- Einkommensteuererklärung: July 31 deadline (October 31 with Steuerberater)\n- Anlage G (Gewerbe) or Anlage S (Freiberufler) for side income\n- EÜR: simple cash bookkeeping under €600k\n- Vorauszahlungen: quarterly if tax > €400\n\nPRACTICAL:\n- Set aside 25-30% of profit\n- Keep receipts 7 years (Aufbewahrungspflicht)\n- Separate business bank account recommended\n- SevDesk, Fastbill, Lexware for bookkeeping\n\nGive detailed, structured answers with bullet points. Use the user's real numbers. Always add a brief note that you are not a licensed Steuerberater. Respond in English unless the user writes in German.`;
-}
-
-function addMsg(role,text,thinking){
-  const row=document.createElement('div');
-  row.className='msg-row '+role;
-  if(role==='assistant'){
-    const av=document.createElement('div');
-    av.className='mini-av';
-    av.textContent='🤖';
-    row.appendChild(av);
-  }
-  const b=document.createElement('div');
-  b.className='bubble'+(thinking?' thinking':'');
-  b.textContent=text;
-  row.appendChild(b);
-  msgsEl.appendChild(row);
-  msgsEl.scrollTop=msgsEl.scrollHeight;
-  return b;
-}
-
-addMsg('assistant','Hallo! I\'m your AI Tax Assistant, specialised in German tax law for small businesses and side income.\n\nI can see your figures: €41,438 income, €13,938 expenses — profit of €27,500.\n\nAsk me anything: Kleinunternehmer status, VAT, deductions, how much to set aside, or Steuererklärung help. What would you like to know?');
-
-async function ask(q){inputEl.value=q;await sendMsg();}
-
-async function sendMsg(){
-  const text=inputEl.value.trim();
-  if(!text||sendBtn.disabled)return;
-  inputEl.value='';
-  sendBtn.disabled=true;
-  if(showSugg){document.getElementById('suggestions').style.display='none';showSugg=false;}
-  addMsg('user',text);
-  history.push({role:'user',content:text});
-  const tb=addMsg('assistant','Thinking...',true);
-  try{
-    const res=await fetch('/api/chat',{
-      method:'POST',
-     headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'model:'claude-sonnet-4-6',
-        max_tokens:1000,
-        system:getSystem(),
-        messages:history
-      })
-    });
-    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||'Error '+res.status);}
-    const data=await res.json();
-    const reply=data.content?.[0]?.text||'No response.';
-    tb.textContent=reply;
-    tb.classList.remove('thinking');
-    history.push({role:'assistant',content:reply});
-  }catch(e){
-    tb.textContent='Error: '+e.message;
-    tb.classList.remove('thinking');
-    history.pop();
-  }
-  sendBtn.disabled=false;
-}
-
-inputEl.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}});
-</script>
-</body>
-</html>
+  document.getElementById('d-expenses').textContent
