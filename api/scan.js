@@ -4,11 +4,16 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { image, mediaType } = req.body;
+    const { imageUrl } = req.body;
 
-    if (!image) {
-      return res.status(400).json({ error: 'No image provided' });
+    if (!imageUrl) {
+      return res.status(400).json({ error: 'No image URL provided' });
     }
+
+    const imageResponse = await fetch(imageUrl);
+    const imageBuffer = await imageResponse.arrayBuffer();
+    const base64Image = Buffer.from(imageBuffer).toString('base64');
+    const contentType = imageResponse.headers.get('content-type') || 'image/jpeg';
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -28,8 +33,8 @@ export default async function handler(req, res) {
                 type: 'image',
                 source: {
                   type: 'base64',
-                  media_type: mediaType || 'image/jpeg',
-                  data: image
+                  media_type: contentType,
+                  data: base64Image
                 }
               },
               {
