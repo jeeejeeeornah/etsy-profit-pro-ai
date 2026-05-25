@@ -68,7 +68,7 @@ var inputEl=document.getElementById('user-input');
 var sendBtn=document.getElementById('send-btn');
 var incomeIn=document.getElementById('income-in');
 var expenseIn=document.getElementById('expense-in');
-var history=[];
+var chatHistory=[];
 var showSugg=true;
 function updateData(){
   var i=parseFloat(incomeIn.value)||0;
@@ -111,7 +111,7 @@ function sendMsg(){
   sendBtn.disabled=true;
   if(showSugg){document.getElementById('suggestions').style.display='none';showSugg=false;}
   addMsg('user',text);
-  history.push({role:'user',content:text});
+  chatHistory.push({role:'user',content:text});
   var tb=addMsg('assistant','Thinking...',true);
   fetch('/api/chat',{
     method:'POST',
@@ -120,7 +120,7 @@ function sendMsg(){
       model:'claude-sonnet-4-6',
       max_tokens:1000,
       system:getSystem(),
-      messages:history
+      messages:chatHistory
     })
   }).then(function(res){
     return res.json().then(function(data){
@@ -131,12 +131,12 @@ function sendMsg(){
     var reply=data.content&&data.content[0]&&data.content[0].text||'No response.';
     tb.textContent=reply;
     tb.classList.remove('thinking');
-    history.push({role:'assistant',content:reply});
+    chatHistory.push({role:'assistant',content:reply});
     sendBtn.disabled=false;
   }).catch(function(e){
     tb.textContent='Error: '+e.message;
     tb.classList.remove('thinking');
-    history.pop();
+    chatHistory.pop();
     sendBtn.disabled=false;
   });
 }
