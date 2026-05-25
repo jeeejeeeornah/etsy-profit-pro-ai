@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -20,7 +20,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 #messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
 .msg-row{display:flex;gap:8px;align-items:flex-end}
 .msg-row.user{flex-direction:row-reverse}
-.mini-av{width:26px;height:26px;border-radius:50%;background:#534AB7;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.mini-av{width:26px;height:26px;border-radius:50%;background:#534AB7;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;color:#fff}
 .bubble{max-width:82%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.6;white-space:pre-wrap}
 .user .bubble{background:#534AB7;color:#fff;border-bottom-right-radius:4px}
 .assistant .bubble{background:#fff;color:#222;border:1px solid #eee;border-bottom-left-radius:4px}
@@ -37,13 +37,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </head>
 <body>
 <div id="header">
-  <div class="avatar">🤖</div>
-  <div><h1>AI Tax Assistant</h1><p>German tax specialist · Powered by Claude</p></div>
+  <div class="avatar">AI</div>
+  <div><h1>AI Tax Assistant</h1><p>German tax specialist - Powered by Claude</p></div>
 </div>
 <div id="data-bar">
-  <div class="data-item">Income: <strong id="d-income">€41,438</strong></div>
-  <div class="data-item">Expenses: <strong id="d-expenses">€13,938</strong></div>
-  <div class="data-item">Profit: <strong id="profit-val">€27,500</strong></div>
+  <div class="data-item">Income: <strong id="d-income">41438</strong></div>
+  <div class="data-item">Expenses: <strong id="d-expenses">13938</strong></div>
+  <div class="data-item">Profit: <strong id="profit-val">27500</strong></div>
   <div class="edit-inputs">
     <input type="number" id="income-in" value="41438" placeholder="Income">
     <input type="number" id="expense-in" value="13938" placeholder="Expenses">
@@ -52,11 +52,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div id="messages"></div>
 <div id="suggestions">
   <button class="chip" onclick="ask('Am I a Kleinunternehmer based on my current income?')">Am I a Kleinunternehmer?</button>
-  <button class="chip" onclick="ask('How much income tax will I roughly owe on my profit? Walk me through it.')">How much tax do I owe?</button>
-  <button class="chip" onclick="ask('What business expenses can I deduct? Give me a full list.')">What can I deduct?</button>
+  <button class="chip" onclick="ask('How much income tax will I roughly owe on my profit?')">How much tax do I owe?</button>
+  <button class="chip" onclick="ask('What business expenses can I deduct?')">What can I deduct?</button>
   <button class="chip" onclick="ask('Do I need to charge VAT on my sales?')">Do I need VAT?</button>
-  <button class="chip" onclick="ask('What percentage of profit should I set aside for taxes and why?')">How much to set aside?</button>
-  <button class="chip" onclick="ask('What do I need to file for my Steuererklaerung and when?')">Steuererklaerung help</button>
+  <button class="chip" onclick="ask('What percentage of profit should I set aside for taxes?')">How much to set aside?</button>
+  <button class="chip" onclick="ask('What do I need to file for my Steuererklarung and when?')">Steuererklarung help</button>
 </div>
 <div id="bottom">
   <textarea id="user-input" placeholder="Ask anything about your German taxes..." rows="1"></textarea>
@@ -70,10 +70,77 @@ var incomeIn=document.getElementById('income-in');
 var expenseIn=document.getElementById('expense-in');
 var history=[];
 var showSugg=true;
-
-function fmt(n){return'EUR '+Number(n).toLocaleString('de-DE');}
 function updateData(){
   var i=parseFloat(incomeIn.value)||0;
   var e=parseFloat(expenseIn.value)||0;
-  document.getElementById('d-income').textContent=fmt(i);
-  document.getElementById('d-expenses').textContent
+  document.getElementById('d-income').textContent=i;
+  document.getElementById('d-expenses').textContent=e;
+  document.getElementById('profit-val').textContent=i-e;
+}
+incomeIn.addEventListener('input',updateData);
+expenseIn.addEventListener('input',updateData);
+function getSystem(){
+  var i=parseFloat(incomeIn.value)||0;
+  var e=parseFloat(expenseIn.value)||0;
+  var p=i-e;
+  return 'You are an expert AI tax assistant for German tax law for small business owners. User income: '+i+' EUR, expenses: '+e+' EUR, profit: '+p+' EUR. Give detailed helpful structured answers with bullet points. Always note you are not a licensed Steuerberater. Key facts: Kleinunternehmer threshold 22000 EUR prior year. Income tax free amount 11784 EUR. Gewerbesteuer free amount 24500 EUR.';
+}
+function addMsg(role,text,thinking){
+  var row=document.createElement('div');
+  row.className='msg-row '+role;
+  if(role==='assistant'){
+    var av=document.createElement('div');
+    av.className='mini-av';
+    av.textContent='AI';
+    row.appendChild(av);
+  }
+  var b=document.createElement('div');
+  b.className='bubble'+(thinking?' thinking':'');
+  b.textContent=text;
+  row.appendChild(b);
+  msgsEl.appendChild(row);
+  msgsEl.scrollTop=msgsEl.scrollHeight;
+  return b;
+}
+addMsg('assistant','Hello! I am your AI Tax Assistant for German tax law. I can see your profit is 27500 EUR. Ask me anything about Kleinunternehmer status, VAT, deductions, or your Steuererklarung.');
+function ask(q){inputEl.value=q;sendMsg();}
+function sendMsg(){
+  var text=inputEl.value.trim();
+  if(!text||sendBtn.disabled){return;}
+  inputEl.value='';
+  sendBtn.disabled=true;
+  if(showSugg){document.getElementById('suggestions').style.display='none';showSugg=false;}
+  addMsg('user',text);
+  history.push({role:'user',content:text});
+  var tb=addMsg('assistant','Thinking...',true);
+  fetch('/api/chat',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-6',
+      max_tokens:1000,
+      system:getSystem(),
+      messages:history
+    })
+  }).then(function(res){
+    return res.json().then(function(data){
+      if(!res.ok){throw new Error(data.error&&data.error.message||'Error '+res.status);}
+      return data;
+    });
+  }).then(function(data){
+    var reply=data.content&&data.content[0]&&data.content[0].text||'No response.';
+    tb.textContent=reply;
+    tb.classList.remove('thinking');
+    history.push({role:'assistant',content:reply});
+    sendBtn.disabled=false;
+  }).catch(function(e){
+    tb.textContent='Error: '+e.message;
+    tb.classList.remove('thinking');
+    history.pop();
+    sendBtn.disabled=false;
+  });
+}
+inputEl.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}});
+</script>
+</body>
+</html>
