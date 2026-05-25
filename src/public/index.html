@@ -87,8 +87,10 @@ incomeIn.addEventListener('input',updateData);
 expenseIn.addEventListener('input',updateData);
 
 var params=new URLSearchParams(window.location.search);
-if(params.get('income')){incomeIn.value=params.get('income');}
-if(params.get('expenses')){expenseIn.value=params.get('expenses');}
+var inc=parseFloat(params.get('income'))||0;
+var exp=parseFloat(params.get('expenses'))||0;
+incomeIn.value=inc;
+expenseIn.value=exp;
 updateData();
 
 function getSystem(){
