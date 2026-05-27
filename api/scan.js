@@ -1,29 +1,14 @@
-import formidable from 'formidable';
-import fs from 'fs';
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const form = formidable({});
-    const [fields, files] = await form.parse(req);
-    
-    const imageFile = files.image?.[0];
-    if (!imageFile) {
+    const { image, mediaType } = req.body;
+
+    if (!image) {
       return res.status(400).json({ error: 'No image provided' });
     }
-
-    const imageBuffer = fs.readFileSync(imageFile.filepath);
-    const base64Image = imageBuffer.toString('base64');
-    const contentType = imageFile.mimetype || 'image/jpeg';
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -42,8 +27,8 @@ export default async function handler(req, res) {
               type: 'image',
               source: {
                 type: 'base64',
-                media_type: contentType,
-                data: base64Image
+                media_type: mediaType || 'image/jpeg',
+                data: image
               }
             },
             {
