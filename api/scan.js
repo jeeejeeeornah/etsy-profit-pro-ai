@@ -4,10 +4,11 @@ export default async function handler(req, res) {
   }
 
   try {
-   const { imageUrl } = req.body;
+    const { imageUrl, fileName } = req.body;
+    const finalUrl = imageUrl || `https://dajqkdztttavidnpijda.supabase.co/storage/v1/object/public/receipts/${fileName}`;
 
-    if (!imageUrl) {
-      return res.status(400).json({ error: 'No image URL provided' });
+    if (!finalUrl) {
+      return res.status(400).json({ error: 'No image provided' });
     }
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -27,7 +28,7 @@ export default async function handler(req, res) {
               type: 'image',
               source: {
                 type: 'url',
-                url: imageUrl
+                url: finalUrl
               }
             },
             {
