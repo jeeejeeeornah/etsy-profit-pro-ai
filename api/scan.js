@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { imageUrl } = req.body;
+   const { imageUrl } = req.body;
 
     if (!imageUrl) {
       return res.status(400).json({ error: 'No image URL provided' });
