@@ -5,7 +5,7 @@ module.exports = async function(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({error:'not allowed'});
   try {
-    const r = await fetch('https://dajqkdztttavidnpijda.supabase.co/storage/v1/object/list/receipts', {method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+process.env.SUPABASE_SERVICE_KEY,'apikey':process.env.SUPABASE_SERVICE_KEY},body:'{"limit":1,"offset":0,"sortBy":{"column":"created_at","order":"desc"}}'});
+    const r = await fetch('https://dajqkdztttavidnpijda.supabase.co/storage/v1/object/list/receipts', {method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+process.env.SUPABASE_SERVICE_KEY,'apikey':process.env.SUPABASE_SERVICE_KEY},body:'{"prefix":"","limit":1,"sortBy":{"column":"created_at","order":"desc"}}'});
     const f = await r.json();
     if (!Array.isArray(f)||!f.length) return res.status(400).json({error:'no files',debug:f});
     const url='https://dajqkdztttavidnpijda.supabase.co/storage/v1/object/public/receipts/'+f[0].name;
