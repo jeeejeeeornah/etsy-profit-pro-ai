@@ -9,10 +9,15 @@ module.exports = async function(req, res) {
     const f = await r.json();
     if (!Array.isArray(f)||!f.length) return res.status(400).json({error:'no files',debug:f});
     const url='https://dajqkdztttavidnpijda.supabase.co/storage/v1/object/public/receipts/'+f[0].name;
+    console.log('Image URL:', url);
     const body = JSON.stringify({model:'claude-sonnet-4-6',max_tokens:500,messages:[{role:'user',content:[{type:'image',source:{type:'url',url}},{type:'text',text:'Extract receipt data. Respond ONLY with JSON: {"amount":<number>,"category":"<Food|Transport|Office Supplies|Software|Marketing|Equipment|Utilities|Other>","note":"<vendor>","date":"<YYYY-MM-DD or null>"}'}]}]});
     const a = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':process.env.ANTHROPIC_API_KEY,'anthropic-version':'2023-06-01'},body});
     const d = await a.json();
+    console.log('Anthropic response:', JSON.stringify(d));
     if (d.error) return res.status(400).json({anthropic_error: d.error, image_url: url});
     return res.status(200).json(JSON.parse(d.content[0].text.replace(/```json|```/g,'').trim()));
-  } catch(e) { return res.status(500).json({error:e.message}); }
+  } catch(e) {
+    console.log('Catch error:', e.message);
+    return res.status(500).json({error:e.message});
+  }
 };
