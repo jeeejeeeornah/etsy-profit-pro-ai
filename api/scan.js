@@ -14,7 +14,7 @@ module.exports = async function(req, res) {
     const a = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':process.env.ANTHROPIC_API_KEY,'anthropic-version':'2023-06-01'},body});
     const d = await a.json();
     console.log('Anthropic response:', JSON.stringify(d));
-    if (d.error) return res.status(400).json({anthropic_error: d.error, image_url: url});
+    return res.status(400).json({full_response: d, image_url: url});
     return res.status(200).json(JSON.parse(d.content[0].text.replace(/```json|```/g,'').trim()));
   } catch(e) {
     console.log('Catch error:', e.message);
