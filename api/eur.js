@@ -35,7 +35,16 @@ module.exports = async function(req, res) {
     const profit = totalIncome - totalExpenses;
 
     const fmt = (n) => n.toFixed(2).replace('.', ',') + ' €';
-    const fmtDate = (d) => d ? new Date(d).toLocaleDateString('de-DE') : '-';
+   const fmtDate = (d) => {
+  if (!d) return '-';
+  try {
+    const date = new Date(d);
+    if (isNaN(date.getTime())) return '-';
+    return date.toLocaleDateString('de-DE');
+  } catch(e) {
+    return '-';
+  }
+};
 
     let incomeRows = (income || []).map(r =>
       `<tr><td>${fmtDate(r.date)}</td><td>${r.source || '-'}</td><td>${r.note || '-'}</td><td style="text-align:right">${fmt(r.amount || 0)}</td></tr>`
