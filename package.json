@@ -2,6 +2,7 @@
   "name": "etsy-profit-pro-ai",
   "version": "1.0.0",
   "dependencies": {
-    "formidable": "^3.5.1"
+    "formidable": "^3.5.1",
+    "@supabase/supabase-js": "^2.39.0"
   }
 }
