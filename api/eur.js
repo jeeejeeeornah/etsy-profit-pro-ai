@@ -32,8 +32,7 @@ const year = req.body?.year || req.query?.year;
       .from('expenses')
       .select('*')
       .eq('user_id', userId)
-      .gte('date', startDate)
-      .lte('date', endDate)
+      
       .order('date', { ascending: true });
 
     const totalIncome = (income || []).reduce((sum, r) => sum + (r.amount || 0), 0);
