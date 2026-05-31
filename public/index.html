@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Tax Assistant</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0D1117; color: #fff; font-family: Inter, sans-serif; height: 100vh; display: flex; flex-direction: column; }
+  #messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .msg { max-width: 80%; padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.5; }
+  .user { background: #6C63FF; align-self: flex-end; border-bottom-right-radius: 4px; }
+  .assistant { background: #1A1F2E; align-self: flex-start; border-bottom-left-radius: 4px; color: #e0e0e0; }
+  #input-area { padding: 12px 16px; background: #1A1F2E; border-top: 1px solid #2D3548; display: flex; gap: 8px; }
+  #input { flex: 1; background: #0D1117; border: 1px solid #2D3548; border-radius: 24px; padding: 10px 16px; color: #fff; font-size: 14px; outline: none; }
+  #send { background: #6C63FF; border: none; border-radius: 50%; width: 40px; height: 40px; color: white; font-size: 18px; cursor: pointer; }
+  .typing { color: #8B9DC3; font-style: italic; font-size: 13px; padding: 8px 16px; }
+</style>
+</head>
+<body>
+<div id="messages">
+  <div class="msg assistant">Hi! I'm your AI tax assistant. Ask me anything about your finances, taxes, or expenses.</div>
+</div>
+<div id="input-area">
+  <input id="input" type="text" placeholder="Ask a tax question..." />
+  <button id="send">↑</button>
+</div>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const income = params.get('income') || '0';
+  const expenses = params.get('expenses') || '0';
+  const systemPrompt = `You are a helpful German tax assistant for freelancers and small business owners. The user's total income is €${income} and total expenses are €${expenses}. Answer questions about taxes, bookkeeping, and finances clearly and concisely.`;
+  const history = [];
+
+  document.getElementById('send').onclick = sendMessage;
+  document.getElementById('input').addEventListener('keydown', e => { if(e.key === 'Enter') sendMessage(); });
+
+  async function sendMessage() {
+    const input = document.getElementById('input');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    addMessage('user', text);
+    history.push({ role: 'user', content: text });
+    const typing = document.createElement('div');
+    typing.className = 'typing';
+    typing.textContent = 'Thinking...';
+    typing.id = 'typing';
+    document.getElementById('messages').appendChild(typing);
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history, system: systemPrompt })
+      });
+      const data = await res.json();
+      document.getElementById('typing')?.remove();
+      const reply = data.content?.[0]?.text || 'Sorry, I could not respond.';
+      history.push({ role: 'assistant', content: reply });
+      addMessage('assistant', reply);
+    } catch(e) {
+      document.getElementById('typing')?.remove();
+      addMessage('assistant', 'Error connecting. Please try again.');
+    }
+  }
+
+  function addMessage(role, text) {
+    const div = document.createElement('div');
+    div.className = `msg ${role}`;
+    div.textContent = text;
+    document.getElementById('messages').appendChild(div);
+    div.scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
