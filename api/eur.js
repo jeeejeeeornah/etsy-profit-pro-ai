@@ -12,7 +12,8 @@ module.exports = async function(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   try {
-    const { userId, year } = req.body;
+    const userId = req.body?.userId || req.query?.userId;
+const year = req.body?.year || req.query?.year;
     if (!userId) return res.status(400).json({ error: 'userId required' });
 
     const reportYear = year || new Date().getFullYear();
