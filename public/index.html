@@ -67,7 +67,10 @@
   function addMessage(role, text) {
     const div = document.createElement('div');
     div.className = `msg ${role}`;
-    div.textContent = text;
+    div.innerHTML = text
+  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+  .replace(/##\s?(.*?)(\n|$)/g, '<br><strong>$1</strong><br>')
+  .replace(/\n/g, '<br>');
     document.getElementById('messages').appendChild(div);
     div.scrollIntoView({ behavior: 'smooth' });
   }
