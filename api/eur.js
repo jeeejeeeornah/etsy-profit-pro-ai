@@ -14,6 +14,7 @@ module.exports = async function(req, res) {
   try {
     const userId = req.body?.userId || req.query?.userId;
     const year = req.body?.year || req.query?.year;
+    const steuernummer = req.body?.steuernummer || req.query?.steuernummer || '';
     if (!userId) return res.status(400).json({ error: 'userId required' });
 
     const reportYear = year || new Date().getFullYear();
@@ -35,16 +36,16 @@ module.exports = async function(req, res) {
     const profit = totalIncome - totalExpenses;
 
     const fmt = (n) => n.toFixed(2).replace('.', ',') + ' €';
-   const fmtDate = (d) => {
-  if (!d) return '-';
-  try {
-    const date = new Date(d);
-    if (isNaN(date.getTime())) return '-';
-    return date.toLocaleDateString('de-DE');
-  } catch(e) {
-    return '-';
-  }
-};
+    const fmtDate = (d) => {
+      if (!d) return '-';
+      try {
+        const date = new Date(d);
+        if (isNaN(date.getTime())) return '-';
+        return date.toLocaleDateString('de-DE');
+      } catch(e) {
+        return '-';
+      }
+    };
 
     let incomeRows = (income || []).map(r =>
       `<tr><td>${fmtDate(r.date)}</td><td>${r.source || '-'}</td><td>${r.note || '-'}</td><td style="text-align:right">${fmt(r.amount || 0)}</td></tr>`
@@ -69,13 +70,15 @@ module.exports = async function(req, res) {
   .summary table { margin: 0; }
   .summary td { border: none; padding: 4px 8px; }
   .total { font-weight: bold; font-size: 14px; }
-  .footer { margin-top: 40px; font-size: 10px; color: #666; }
+  .footer { margin-top: 40px; font-size: 10px; color: #666; border-top: 1px solid #ccc; padding-top: 12px; }
 </style>
 </head>
 <body>
 <h1>Einnahmenüberschussrechnung (EÜR)</h1>
 <p>Steuerjahr: <strong>${reportYear}</strong> &nbsp;|&nbsp; Erstellt am: <strong>${new Date().toLocaleDateString('de-DE')}</strong></p>
+${steuernummer ? `<p>Steuernummer: <strong>${steuernummer}</strong></p>` : ''}
 <p>Erstellt mit <strong>Klarer Gewinn</strong></p>
+<p style="font-size:11px; color:#444;">Alle Beträge gemäß Kleinunternehmerregelung nach §19 UStG ohne Umsatzsteuer.</p>
 
 <h2>Einnahmen</h2>
 <table>
@@ -101,7 +104,9 @@ module.exports = async function(req, res) {
 </div>
 
 <div class="footer">
-  <p>Dieses Dokument wurde automatisch erstellt und dient als Übersicht. Bitte prüfen Sie die Angaben mit Ihrem Steuerberater.</p>
+  <p>Alle Beträge gemäß Kleinunternehmerregelung nach §19 UStG ohne Umsatzsteuer.</p>
+  <p>Dieses Dokument wurde automatisch mit Klarer Gewinn erstellt und dient als Übersicht der Betriebseinnahmen und -ausgaben. Bitte prüfen Sie alle Angaben mit Ihrem Steuerberater vor der Einreichung beim Finanzamt.</p>
+  <p>Seite 1 &nbsp;|&nbsp; Erstellt am ${new Date().toLocaleDateString('de-DE')} &nbsp;|&nbsp; Klarer Gewinn</p>
 </div>
 </body>
 </html>`;
