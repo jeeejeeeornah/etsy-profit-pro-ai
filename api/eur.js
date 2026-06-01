@@ -48,11 +48,11 @@ module.exports = async function(req, res) {
     };
 
     let incomeRows = (income || []).map(r =>
-      `<tr><td>${fmtDate(r.date)}</td><td>${r.source || '-'}</td><td>${r.note || '-'}</td><td style="text-align:right">${fmt(r.amount || 0)}</td></tr>`
+      `<tr><td>${r.beleg_nr || '-'}</td><td>${fmtDate(r.date)}</td><td>${r.source || '-'}</td><td>${r.note || '-'}</td><td style="text-align:right">${fmt(r.amount || 0)}</td></tr>`
     ).join('');
 
     let expenseRows = (expenses || []).map(r =>
-      `<tr><td>${fmtDate(r.date)}</td><td>${r.category || '-'}</td><td>${r.note || '-'}</td><td style="text-align:right">${fmt(r.amount || 0)}</td></tr>`
+      `<tr><td>${r.beleg_nr || '-'}</td><td>${fmtDate(r.date)}</td><td>${r.category || '-'}</td><td>${r.note || '-'}</td><td style="text-align:right">${fmt(r.amount || 0)}</td></tr>`
     ).join('');
 
     const html = `<!DOCTYPE html>
@@ -82,16 +82,16 @@ ${steuernummer ? `<p>Steuernummer: <strong>${steuernummer}</strong></p>` : ''}
 
 <h2>Einnahmen</h2>
 <table>
-  <thead><tr><th>Datum</th><th>Quelle</th><th>Notiz</th><th style="text-align:right">Betrag</th></tr></thead>
-  <tbody>${incomeRows || '<tr><td colspan="4">Keine Einnahmen</td></tr>'}</tbody>
-  <tfoot><tr><td colspan="3"><strong>Gesamt Einnahmen</strong></td><td style="text-align:right"><strong>${fmt(totalIncome)}</strong></td></tr></tfoot>
+  <thead><tr><th>Beleg-Nr.</th><th>Datum</th><th>Quelle</th><th>Notiz</th><th style="text-align:right">Betrag</th></tr></thead>
+  <tbody>${incomeRows || '<tr><td colspan="5">Keine Einnahmen</td></tr>'}</tbody>
+  <tfoot><tr><td colspan="4"><strong>Gesamt Einnahmen</strong></td><td style="text-align:right"><strong>${fmt(totalIncome)}</strong></td></tr></tfoot>
 </table>
 
 <h2>Ausgaben</h2>
 <table>
-  <thead><tr><th>Datum</th><th>Kategorie</th><th>Notiz</th><th style="text-align:right">Betrag</th></tr></thead>
-  <tbody>${expenseRows || '<tr><td colspan="4">Keine Ausgaben</td></tr>'}</tbody>
-  <tfoot><tr><td colspan="3"><strong>Gesamt Ausgaben</strong></td><td style="text-align:right"><strong>${fmt(totalExpenses)}</strong></td></tr></tfoot>
+  <thead><tr><th>Beleg-Nr.</th><th>Datum</th><th>Kategorie</th><th>Notiz</th><th style="text-align:right">Betrag</th></tr></thead>
+  <tbody>${expenseRows || '<tr><td colspan="5">Keine Ausgaben</td></tr>'}</tbody>
+  <tfoot><tr><td colspan="4"><strong>Gesamt Ausgaben</strong></td><td style="text-align:right"><strong>${fmt(totalExpenses)}</strong></td></tr></tfoot>
 </table>
 
 <div class="summary">
