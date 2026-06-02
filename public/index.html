@@ -172,9 +172,7 @@ async function joinWaitlist() {
     document.getElementById('email').focus();
     return;
   }
-  const btn = document.querySelector('.btn-primary');
-  btn.textContent = '...';
-  btn.disabled = true;
+  document.getElementById('success').style.display = 'none';
   try {
     const res = await fetch('/api/waitlist', {
       method: 'POST',
@@ -187,22 +185,7 @@ async function joinWaitlist() {
       document.getElementById('email').value = '';
     }
   } catch(e) {
-    console.error(e);
+    console.error('Waitlist error:', e);
   }
-  btn.textContent = 'Frühen Zugang sichern';
-  btn.disabled = false;
 }
 </script>
-function joinWaitlist() {
-  const email = document.getElementById('email').value.trim();
-  if (!email || !email.includes('@')) {
-    document.getElementById('email').focus();
-    return;
-  }
-  document.getElementById('success').style.display = 'block';
-  document.getElementById('email').value = '';
-}
-</script>
-
-</body>
-</html>
