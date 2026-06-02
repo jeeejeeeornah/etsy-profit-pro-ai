@@ -174,7 +174,7 @@ async function joinWaitlist() {
   }
   document.getElementById('success').style.display = 'none';
   try {
-    const res = await fetch('/api/waitlist', {
+    const res = await fetch('https://etsy-profit-pro-ai.vercel.app/api/waitlist', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email })
