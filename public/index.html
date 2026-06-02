@@ -166,6 +166,33 @@
 </footer>
 
 <script>
+async function joinWaitlist() {
+  const email = document.getElementById('email').value.trim();
+  if (!email || !email.includes('@')) {
+    document.getElementById('email').focus();
+    return;
+  }
+  const btn = document.querySelector('.btn-primary');
+  btn.textContent = '...';
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('success').style.display = 'block';
+      document.getElementById('email').value = '';
+    }
+  } catch(e) {
+    console.error(e);
+  }
+  btn.textContent = 'Frühen Zugang sichern';
+  btn.disabled = false;
+}
+</script>
 function joinWaitlist() {
   const email = document.getElementById('email').value.trim();
   if (!email || !email.includes('@')) {
