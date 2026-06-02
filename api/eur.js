@@ -23,7 +23,7 @@ module.exports = async function(req, res) {
       .from('income')
       .select('*')
       .eq('user_id', userId)
-      .order('date', { ascending: true });
+      .order('payment_date', { ascending: true });
 
     const { data: expenses } = await supabase
       .from('expenses')
@@ -45,7 +45,6 @@ module.exports = async function(req, res) {
       } catch(e) { return '-'; }
     };
 
-    // Official Anlage EÜR category order
     const categoryOrder = [
       'Waren / Rohstoffe / Hilfsstoffe',
       'Versandkosten',
@@ -62,7 +61,6 @@ module.exports = async function(req, res) {
       'Sonstige Betriebsausgaben'
     ];
 
-    // Group expenses by category
     const grouped = {};
     (expenses || []).forEach(r => {
       const cat = r.category || 'Sonstige Betriebsausgaben';
@@ -70,7 +68,6 @@ module.exports = async function(req, res) {
       grouped[cat].push(r);
     });
 
-    // Build grouped expense rows
     let expenseRows = '';
     let categorySummaryRows = '';
     const usedCategories = [...new Set([
@@ -90,7 +87,7 @@ module.exports = async function(req, res) {
     });
 
     const incomeRows = (income || []).map(r =>
-      `<tr><td>${r.beleg_nr || '-'}</td><td>${fmtDate(r.date)}</td><td>${r.source || '-'}</td><td>${r.note || '-'}</td><td style="text-align:right">${fmt(r.amount || 0)}</td></tr>`
+      `<tr><td>${r.beleg_nr || '-'}</td><td>${fmtDate(r.date)}</td><td>${fmtDate(r.payment_date)}</td><td>${r.source || '-'}</td><td>${r.note || '-'}</td><td style="text-align:right">${fmt(r.amount || 0)}</td></tr>`
     ).join('');
 
     const html = `<!DOCTYPE html>
@@ -118,13 +115,13 @@ module.exports = async function(req, res) {
 <p>Steuerjahr: <strong>${reportYear}</strong> &nbsp;|&nbsp; Erstellt am: <strong>${new Date().toLocaleDateString('de-DE')}</strong></p>
 ${steuernummer ? `<p>Steuernummer: <strong>${steuernummer}</strong></p>` : ''}
 <p>Erstellt mit <strong>Klarer Gewinn</strong></p>
-<p style="font-size:11px; color:#444;">Alle Beträge gemäß Kleinunternehmerregelung nach §19 UStG ohne Umsatzsteuer.</p>
+<p style="font-size:11px; color:#444;">Alle Beträge gemäß Kleinunternehmerregelung nach §19 UStG ohne Umsatzsteuer. Einnahmen nach Zahlungseingangsdatum (Zu- und Abflussprinzip § 11 EStG).</p>
 
 <h2>Betriebseinnahmen</h2>
 <table>
-  <thead><tr><th>Beleg-Nr.</th><th>Datum</th><th>Quelle</th><th>Notiz</th><th style="text-align:right">Betrag</th></tr></thead>
-  <tbody>${incomeRows || '<tr><td colspan="5">Keine Einnahmen</td></tr>'}</tbody>
-  <tfoot><tr><td colspan="4"><strong>Gesamt Betriebseinnahmen</strong></td><td style="text-align:right"><strong>${fmt(totalIncome)}</strong></td></tr></tfoot>
+  <thead><tr><th>Beleg-Nr.</th><th>Rechnungsdatum</th><th>Zahlungsdatum</th><th>Quelle</th><th>Notiz</th><th style="text-align:right">Betrag</th></tr></thead>
+  <tbody>${incomeRows || '<tr><td colspan="6">Keine Einnahmen</td></tr>'}</tbody>
+  <tfoot><tr><td colspan="5"><strong>Gesamt Betriebseinnahmen</strong></td><td style="text-align:right"><strong>${fmt(totalIncome)}</strong></td></tr></tfoot>
 </table>
 
 <h2>Betriebsausgaben</h2>
@@ -154,6 +151,7 @@ ${steuernummer ? `<p>Steuernummer: <strong>${steuernummer}</strong></p>` : ''}
 
 <div class="footer">
   <p>Alle Beträge gemäß Kleinunternehmerregelung nach §19 UStG ohne Umsatzsteuer.</p>
+  <p>Einnahmen werden nach dem Zahlungseingangsdatum erfasst (Zu- und Abflussprinzip gemäß § 11 EStG).</p>
   <p>Dieses Dokument wurde automatisch mit Klarer Gewinn erstellt und dient als Übersicht der Betriebseinnahmen und -ausgaben. Bitte prüfen Sie alle Angaben mit Ihrem Steuerberater vor der Einreichung beim Finanzamt.</p>
   <p>Seite 1 &nbsp;|&nbsp; Erstellt am ${new Date().toLocaleDateString('de-DE')} &nbsp;|&nbsp; Klarer Gewinn</p>
 </div>
