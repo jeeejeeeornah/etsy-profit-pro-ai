@@ -1,3 +1,162 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klarer Gewinn — Buchhaltung für Selbstständige</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0D1117; color: #fff; font-family: Inter, Arial, sans-serif; line-height: 1.6; }
+  nav { display: flex; justify-content: space-between; align-items: flex-end; padding: 0 40px; border-bottom: 1px solid #2D3548; height: 110px; }
+  .logo { display: flex; align-items: flex-end; gap: 14px; }
+  .logo img { width: 112px; height: 112px; margin-bottom: -1px; }
+  .logo span { font-size: 26px; font-weight: 800; color: #fff; padding-bottom: 22px; }
+  .nav-links { display: flex; gap: 24px; align-items: center; padding-bottom: 22px; }
+  .nav-links a { color: #8B9DC3; text-decoration: none; font-size: 14px; }
+  .nav-links a:hover { color: #fff; }
+  .hero { text-align: center; padding: 100px 20px 80px; max-width: 800px; margin: 0 auto; }
+  .badge { display: inline-block; background: #1A1F2E; border: 1px solid #2D3548; border-radius: 20px; padding: 6px 16px; font-size: 12px; color: #6C63FF; margin-bottom: 24px; letter-spacing: 1px; text-transform: uppercase; }
+  .hero h1 { font-size: 52px; font-weight: 800; line-height: 1.15; margin-bottom: 20px; }
+  .hero h1 span { color: #6C63FF; }
+  .hero p { font-size: 18px; color: #8B9DC3; margin-bottom: 40px; max-width: 560px; margin-left: auto; margin-right: auto; }
+  .waitlist { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
+  .waitlist input { background: #1A1F2E; border: 1px solid #2D3548; border-radius: 12px; padding: 14px 20px; color: #fff; font-size: 15px; width: 300px; outline: none; }
+  .waitlist input:focus { border-color: #6C63FF; }
+  .waitlist input::placeholder { color: #8B9DC3; }
+  .btn-primary { background: #6C63FF; border: none; border-radius: 12px; padding: 14px 28px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+  .btn-primary:hover { opacity: 0.85; }
+  .early-access { font-size: 13px; color: #8B9DC3; margin-bottom: 60px; }
+  .early-access span { color: #00D4AA; font-weight: 600; }
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; max-width: 1000px; margin: 0 auto 80px; padding: 0 40px; }
+  .feature { background: #1A1F2E; border: 1px solid #2D3548; border-radius: 16px; padding: 28px; }
+  .feature-icon { font-size: 28px; margin-bottom: 12px; }
+  .feature h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .feature p { font-size: 14px; color: #8B9DC3; }
+  .pricing { text-align: center; padding: 80px 20px; background: #1A1F2E; }
+  .pricing h2 { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
+  .pricing p { color: #8B9DC3; margin-bottom: 48px; }
+  .plans { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+  .plan { background: #0D1117; border: 1px solid #2D3548; border-radius: 16px; padding: 32px; width: 280px; text-align: left; position: relative; }
+  .plan.featured { border-color: #6C63FF; }
+  .plan-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #6C63FF; border-radius: 20px; padding: 4px 16px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .plan h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .plan .price { font-size: 36px; font-weight: 800; margin-bottom: 4px; }
+  .plan .price span { font-size: 16px; color: #8B9DC3; font-weight: 400; }
+  .plan .early { font-size: 13px; color: #00D4AA; margin-bottom: 24px; }
+  .plan ul { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+  .plan ul li { font-size: 14px; color: #8B9DC3; display: flex; align-items: center; gap: 8px; }
+  .plan ul li::before { content: '✓'; color: #00D4AA; font-weight: 700; }
+  .plan ul li.no::before { content: '✕'; color: #FF6B6B; }
+  .footer { text-align: center; padding: 40px 20px; border-top: 1px solid #2D3548; }
+  .footer-links { display: flex; gap: 24px; justify-content: center; margin-bottom: 16px; }
+  .footer-links a { color: #8B9DC3; text-decoration: none; font-size: 13px; }
+  .footer-links a:hover { color: #fff; }
+  .footer p { font-size: 12px; color: #8B9DC3; }
+  .success { display: none; background: #00D4AA20; border: 1px solid #00D4AA; border-radius: 12px; padding: 12px 20px; color: #00D4AA; font-size: 14px; margin-top: 12px; text-align: center; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <img src="klarer_gewinn_transparent.svg" alt="Klarer Gewinn">
+    <span>Klarer Gewinn</span>
+  </div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#pricing">Preise</a>
+    <a href="https://etsy-profit-pro-ai.vercel.app/api/impressum">Impressum</a>
+    <a href="https://etsy-profit-pro-ai.vercel.app/api/privacy">Datenschutz</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="badge">🚀 Demnächst verfügbar</div>
+  <h1>Buchhaltung für<br><span>Selbstständige</span><br>so einfach wie nie.</h1>
+  <p>Einnahmen tracken, Ausgaben erfassen, EÜR exportieren — alles in einer App. Speziell für Kleinunternehmer und Etsy-Verkäufer in Deutschland.</p>
+  <div class="waitlist">
+    <input type="email" id="email" placeholder="deine@email.de" />
+    <button class="btn-primary" onclick="joinWaitlist()">Frühen Zugang sichern</button>
+  </div>
+  <div class="success" id="success">✓ Du bist auf der Liste! Wir melden uns bald.</div>
+  <p class="early-access">🎉 Frühe Nutzer erhalten <span>50% Rabatt</span> auf das Pro-Abo für immer.</p>
+</section>
+
+<div class="features" id="features">
+  <div class="feature">
+    <div class="feature-icon">📊</div>
+    <h3>Einnahmen & Ausgaben</h3>
+    <p>Erfasse alle Transaktionen in Sekunden. Kategorien nach Anlage EÜR voreingestellt.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">🤖</div>
+    <h3>KI-Belegscan</h3>
+    <p>Foto machen — fertig. Die KI erkennt Betrag, Kategorie und Datum automatisch.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">📄</div>
+    <h3>EÜR Export</h3>
+    <p>Professionelle Einnahmenüberschussrechnung mit §19 UStG Hinweis. Bereit für den Steuerberater.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">🛍️</div>
+    <h3>Etsy Integration</h3>
+    <p>Etsy-Bestellungen automatisch importieren. Kein manuelles Eingeben mehr.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">⚠️</div>
+    <h3>Kleinunternehmer-Warnung</h3>
+    <p>Automatische Warnung wenn du dich der €22.000 Grenze näherst.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">🌍</div>
+    <h3>DE / EN</h3>
+    <p>Vollständig auf Deutsch und Englisch verfügbar. Einfach umschalten.</p>
+  </div>
+</div>
+
+<section class="pricing" id="pricing">
+  <h2>Einfache Preise</h2>
+  <p>Keine versteckten Kosten. Kündigung jederzeit möglich.</p>
+  <div class="plans">
+    <div class="plan">
+      <h3>Free</h3>
+      <div class="price">€0 <span>/Monat</span></div>
+      <div class="early">&nbsp;</div>
+      <ul>
+        <li>10 Transaktionen pro Monat</li>
+        <li>EÜR Export</li>
+        <li class="no">KI-Chat</li>
+        <li class="no">Belegscan</li>
+        <li class="no">Etsy Sync</li>
+      </ul>
+      <button class="btn-primary" style="width:100%;background:#2D3548" onclick="joinWaitlist()">Kostenlos starten</button>
+    </div>
+    <div class="plan featured">
+      <div class="plan-badge">Früher Zugang — 50% Rabatt</div>
+      <h3>Pro</h3>
+      <div class="price">€4,99 <span>/Monat</span></div>
+      <div class="early">Normalpreis €9,99 — nur für frühe Nutzer</div>
+      <ul>
+        <li>Unbegrenzte Transaktionen</li>
+        <li>EÜR Export</li>
+        <li>KI-Chat</li>
+        <li>Belegscan</li>
+        <li>Etsy Sync</li>
+      </ul>
+      <button class="btn-primary" style="width:100%" onclick="joinWaitlist()">Frühen Zugang sichern</button>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-links">
+    <a href="https://etsy-profit-pro-ai.vercel.app/api/impressum">Impressum</a>
+    <a href="https://etsy-profit-pro-ai.vercel.app/api/privacy">Datenschutz</a>
+  </div>
+  <p>© 2026 Nathan Zinzan Goundar — Klarer Gewinn. Alle Rechte vorbehalten.</p>
+</footer>
+
 <script>
 const SUPABASE_URL = 'https://dajqkdztttavidnpijda.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRhanFrZHp0dHRhdmlkbnBpamRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY3MTIwNjAsImV4cCI6MjA2MjI4ODA2MH0.HLBuCpumWfHGHuMnCPAHrjwJkLLpSNjuuMdNYivlrYk';
@@ -28,3 +187,6 @@ async function joinWaitlist() {
   }
 }
 </script>
+
+</body>
+</html>
