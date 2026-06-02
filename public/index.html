@@ -1,79 +1,181 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Tax Assistant</title>
+<title>Klarer Gewinn — Buchhaltung für Selbstständige</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #0D1117; color: #fff; font-family: Inter, sans-serif; height: 100vh; display: flex; flex-direction: column; }
-  #messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
-  .msg { max-width: 80%; padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.5; }
-  .user { background: #6C63FF; align-self: flex-end; border-bottom-right-radius: 4px; }
-  .assistant { background: #1A1F2E; align-self: flex-start; border-bottom-left-radius: 4px; color: #e0e0e0; }
-  #input-area { padding: 12px 16px; background: #1A1F2E; border-top: 1px solid #2D3548; display: flex; gap: 8px; }
-  #input { flex: 1; background: #0D1117; border: 1px solid #2D3548; border-radius: 24px; padding: 10px 16px; color: #fff; font-size: 14px; outline: none; }
-  #send { background: #6C63FF; border: none; border-radius: 50%; width: 40px; height: 40px; color: white; font-size: 18px; cursor: pointer; }
-  .typing { color: #8B9DC3; font-style: italic; font-size: 13px; padding: 8px 16px; }
+  body { background: #0D1117; color: #fff; font-family: Inter, Arial, sans-serif; line-height: 1.6; }
+  
+  nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid #2D3548; }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo img { width: 36px; height: 36px; border-radius: 8px; }
+  .logo span { font-size: 20px; font-weight: 700; color: #fff; }
+  .nav-links { display: flex; gap: 24px; align-items: center; }
+  .nav-links a { color: #8B9DC3; text-decoration: none; font-size: 14px; }
+  .nav-links a:hover { color: #fff; }
+
+  .hero { text-align: center; padding: 100px 20px 80px; max-width: 800px; margin: 0 auto; }
+  .badge { display: inline-block; background: #1A1F2E; border: 1px solid #2D3548; border-radius: 20px; padding: 6px 16px; font-size: 12px; color: #6C63FF; margin-bottom: 24px; letter-spacing: 1px; text-transform: uppercase; }
+  .hero h1 { font-size: 52px; font-weight: 800; line-height: 1.15; margin-bottom: 20px; }
+  .hero h1 span { color: #6C63FF; }
+  .hero p { font-size: 18px; color: #8B9DC3; margin-bottom: 40px; max-width: 560px; margin-left: auto; margin-right: auto; }
+  
+  .waitlist { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
+  .waitlist input { background: #1A1F2E; border: 1px solid #2D3548; border-radius: 12px; padding: 14px 20px; color: #fff; font-size: 15px; width: 300px; outline: none; }
+  .waitlist input:focus { border-color: #6C63FF; }
+  .waitlist input::placeholder { color: #8B9DC3; }
+  .btn-primary { background: #6C63FF; border: none; border-radius: 12px; padding: 14px 28px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+  .btn-primary:hover { opacity: 0.85; }
+  .early-access { font-size: 13px; color: #8B9DC3; margin-bottom: 60px; }
+  .early-access span { color: #00D4AA; font-weight: 600; }
+
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; max-width: 1000px; margin: 0 auto 80px; padding: 0 40px; }
+  .feature { background: #1A1F2E; border: 1px solid #2D3548; border-radius: 16px; padding: 28px; }
+  .feature-icon { font-size: 28px; margin-bottom: 12px; }
+  .feature h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .feature p { font-size: 14px; color: #8B9DC3; }
+
+  .pricing { text-align: center; padding: 80px 20px; background: #1A1F2E; }
+  .pricing h2 { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
+  .pricing p { color: #8B9DC3; margin-bottom: 48px; }
+  .plans { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+  .plan { background: #0D1117; border: 1px solid #2D3548; border-radius: 16px; padding: 32px; width: 280px; text-align: left; }
+  .plan.featured { border-color: #6C63FF; position: relative; }
+  .plan-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #6C63FF; border-radius: 20px; padding: 4px 16px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .plan h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .plan .price { font-size: 36px; font-weight: 800; margin-bottom: 4px; }
+  .plan .price span { font-size: 16px; color: #8B9DC3; font-weight: 400; }
+  .plan .early { font-size: 13px; color: #00D4AA; margin-bottom: 24px; }
+  .plan ul { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+  .plan ul li { font-size: 14px; color: #8B9DC3; display: flex; align-items: center; gap: 8px; }
+  .plan ul li::before { content: '✓'; color: #00D4AA; font-weight: 700; }
+  .plan ul li.no::before { content: '✕'; color: #FF6B6B; }
+
+  .footer { text-align: center; padding: 40px 20px; border-top: 1px solid #2D3548; }
+  .footer-links { display: flex; gap: 24px; justify-content: center; margin-bottom: 16px; }
+  .footer-links a { color: #8B9DC3; text-decoration: none; font-size: 13px; }
+  .footer-links a:hover { color: #fff; }
+  .footer p { font-size: 12px; color: #8B9DC3; }
+
+  .success { display: none; background: #00D4AA20; border: 1px solid #00D4AA; border-radius: 12px; padding: 12px 20px; color: #00D4AA; font-size: 14px; margin-top: 12px; }
 </style>
 </head>
 <body>
-<div id="messages">
-  <div class="msg assistant">Hi! I'm your AI tax assistant. Ask me anything about your finances, taxes, or expenses.</div>
+
+<nav>
+  <div class="logo">
+    <img src="klarer_gewinn_icon.png" alt="Klarer Gewinn">
+    <span>Klarer Gewinn</span>
+  </div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#pricing">Preise</a>
+    <a href="https://etsy-profit-pro-ai.vercel.app/api/impressum">Impressum</a>
+    <a href="https://etsy-profit-pro-ai.vercel.app/api/privacy">Datenschutz</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="badge">🚀 Demnächst verfügbar</div>
+  <h1>Buchhaltung für<br><span>Selbstständige</span><br>so einfach wie nie.</h1>
+  <p>Einnahmen tracken, Ausgaben erfassen, EÜR exportieren — alles in einer App. Speziell für Kleinunternehmer und Etsy-Verkäufer in Deutschland.</p>
+  
+  <div class="waitlist">
+    <input type="email" id="email" placeholder="deine@email.de" />
+    <button class="btn-primary" onclick="joinWaitlist()">Frühen Zugang sichern</button>
+  </div>
+  <div class="success" id="success">✓ Du bist auf der Liste! Wir melden uns bald.</div>
+  <p class="early-access">🎉 Frühe Nutzer erhalten <span>50% Rabatt</span> auf das Pro-Abo für immer.</p>
+</section>
+
+<div class="features">
+  <div class="feature">
+    <div class="feature-icon">📊</div>
+    <h3>Einnahmen & Ausgaben</h3>
+    <p>Erfasse alle Transaktionen in Sekunden. Kategorien nach Anlage EÜR voreingestellt.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">🤖</div>
+    <h3>KI-Belegscan</h3>
+    <p>Foto machen — fertig. Die KI erkennt Betrag, Kategorie und Datum automatisch.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">📄</div>
+    <h3>EÜR Export</h3>
+    <p>Professionelle Einnahmenüberschussrechnung mit §19 UStG Hinweis. Bereit für den Steuerberater.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">🛍️</div>
+    <h3>Etsy Integration</h3>
+    <p>Etsy-Bestellungen automatisch importieren. Kein manuelles Eingeben mehr.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">⚠️</div>
+    <h3>Kleinunternehmer-Warnung</h3>
+    <p>Automatische Warnung wenn du dich der €22.000 Grenze näherst.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">🌍</div>
+    <h3>DE / EN</h3>
+    <p>Vollständig auf Deutsch und Englisch verfügbar. Einfach umschalten.</p>
+  </div>
 </div>
-<div id="input-area">
-  <input id="input" type="text" placeholder="Ask a tax question..." />
-  <button id="send">↑</button>
-</div>
+
+<section class="pricing" id="pricing">
+  <h2>Einfache Preise</h2>
+  <p>Keine versteckten Kosten. Kündigung jederzeit möglich.</p>
+  <div class="plans">
+    <div class="plan">
+      <h3>Free</h3>
+      <div class="price">€0 <span>/Monat</span></div>
+      <div class="early">&nbsp;</div>
+      <ul>
+        <li>10 Transaktionen pro Monat</li>
+        <li>EÜR Export</li>
+        <li class="no">KI-Chat</li>
+        <li class="no">Belegscan</li>
+        <li class="no">Etsy Sync</li>
+      </ul>
+      <button class="btn-primary" style="width:100%;background:#2D3548" onclick="joinWaitlist()">Kostenlos starten</button>
+    </div>
+    <div class="plan featured">
+      <div class="plan-badge">Früher Zugang — 50% Rabatt</div>
+      <h3>Pro</h3>
+      <div class="price">€4,99 <span>/Monat</span></div>
+      <div class="early">Normalpreis €9,99 — nur für frühe Nutzer</div>
+      <ul>
+        <li>Unbegrenzte Transaktionen</li>
+        <li>EÜR Export</li>
+        <li>KI-Chat</li>
+        <li>Belegscan</li>
+        <li>Etsy Sync</li>
+      </ul>
+      <button class="btn-primary" style="width:100%" onclick="joinWaitlist()">Frühen Zugang sichern</button>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-links">
+    <a href="https://etsy-profit-pro-ai.vercel.app/api/impressum">Impressum</a>
+    <a href="https://etsy-profit-pro-ai.vercel.app/api/privacy">Datenschutz</a>
+  </div>
+  <p>© 2026 Nathan Zinzan Goundar — Klarer Gewinn. Alle Rechte vorbehalten.</p>
+</footer>
+
 <script>
-  const params = new URLSearchParams(window.location.search);
-  const income = params.get('income') || '0';
-  const expenses = params.get('expenses') || '0';
-  const systemPrompt = `You are a helpful German tax assistant for freelancers and small business owners. The user's total income is €${income} and total expenses are €${expenses}. Answer questions about taxes, bookkeeping, and finances clearly and concisely.`;
-  const history = [];
-
-  document.getElementById('send').onclick = sendMessage;
-  document.getElementById('input').addEventListener('keydown', e => { if(e.key === 'Enter') sendMessage(); });
-
-  async function sendMessage() {
-    const input = document.getElementById('input');
-    const text = input.value.trim();
-    if (!text) return;
-    input.value = '';
-    addMessage('user', text);
-    history.push({ role: 'user', content: text });
-    const typing = document.createElement('div');
-    typing.className = 'typing';
-    typing.textContent = 'Thinking...';
-    typing.id = 'typing';
-    document.getElementById('messages').appendChild(typing);
-    try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: history, system: systemPrompt })
-      });
-      const data = await res.json();
-      document.getElementById('typing')?.remove();
-      const reply = data.content?.[0]?.text || 'Sorry, I could not respond.';
-      history.push({ role: 'assistant', content: reply });
-      addMessage('assistant', reply);
-    } catch(e) {
-      document.getElementById('typing')?.remove();
-      addMessage('assistant', 'Error connecting. Please try again.');
-    }
+function joinWaitlist() {
+  const email = document.getElementById('email').value.trim();
+  if (!email || !email.includes('@')) {
+    document.getElementById('email').focus();
+    return;
   }
-
-  function addMessage(role, text) {
-    const div = document.createElement('div');
-    div.className = `msg ${role}`;
-    div.innerHTML = text
-  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-  .replace(/##\s?(.*?)(\n|$)/g, '<br><strong>$1</strong><br>')
-  .replace(/\n/g, '<br>');
-    document.getElementById('messages').appendChild(div);
-    div.scrollIntoView({ behavior: 'smooth' });
-  }
+  document.getElementById('success').style.display = 'block';
+  document.getElementById('email').value = '';
+}
 </script>
+
 </body>
 </html>
