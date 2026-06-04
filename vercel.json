@@ -1,3 +1,5 @@
 {
-  "outputDirectory": "public"
+  "routes": [
+    { "src": "/chat.html", "dest": "/public/chat.html" }
+  ]
 }
