@@ -32,6 +32,7 @@
   .feature-icon { font-size: 28px; margin-bottom: 12px; }
   .feature h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
   .feature p { font-size: 14px; color: #8B9DC3; }
+  .coming-soon-badge { display: inline-block; background: #2D3548; border-radius: 8px; padding: 2px 8px; font-size: 11px; color: #8B9DC3; margin-left: 8px; vertical-align: middle; }
   .pricing { text-align: center; padding: 80px 20px; background: #1A1F2E; }
   .pricing h2 { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
   .pricing p { color: #8B9DC3; margin-bottom: 48px; }
@@ -47,6 +48,7 @@
   .plan ul li { font-size: 14px; color: #8B9DC3; display: flex; align-items: center; gap: 8px; }
   .plan ul li::before { content: '✓'; color: #00D4AA; font-weight: 700; }
   .plan ul li.no::before { content: '✕'; color: #FF6B6B; }
+  .plan ul li.soon::before { content: '🔜'; }
   .footer { text-align: center; padding: 40px 20px; border-top: 1px solid #2D3548; }
   .footer-links { display: flex; gap: 24px; justify-content: center; margin-bottom: 16px; }
   .footer-links a { color: #8B9DC3; text-decoration: none; font-size: 13px; }
@@ -89,7 +91,7 @@
     <p>Erfasse alle Transaktionen in Sekunden. Kategorien nach Anlage EÜR voreingestellt.</p>
   </div>
   <div class="feature">
-    <div class="feature-icon">🤖</div>
+    <div class="feature-icon">📸</div>
     <h3>KI-Belegscan</h3>
     <p>Foto machen — fertig. Die KI erkennt Betrag, Kategorie und Datum automatisch.</p>
   </div>
@@ -106,12 +108,12 @@
   <div class="feature">
     <div class="feature-icon">⚠️</div>
     <h3>Kleinunternehmer-Warnung</h3>
-    <p>Automatische Warnung wenn du dich der €22.000 Grenze näherst.</p>
+    <p>Automatische Warnung wenn du dich der €25.000 Grenze näherst.</p>
   </div>
   <div class="feature">
-    <div class="feature-icon">🌍</div>
-    <h3>DE / EN</h3>
-    <p>Vollständig auf Deutsch und Englisch verfügbar. Einfach umschalten.</p>
+    <div class="feature-icon">🤖</div>
+    <h3>KI-Steuerberater <span class="coming-soon-badge">Demnächst</span></h3>
+    <p>Dein persönlicher KI-Assistent für Steuerfragen — bald verfügbar.</p>
   </div>
 </div>
 
@@ -126,9 +128,9 @@
       <ul>
         <li>10 Transaktionen pro Monat</li>
         <li>EÜR Export</li>
-        <li class="no">KI-Chat</li>
         <li class="no">Belegscan</li>
         <li class="no">Etsy Sync</li>
+        <li class="soon">KI-Steuerberater (bald)</li>
       </ul>
       <button class="btn-primary" style="width:100%;background:#2D3548" onclick="joinWaitlist()">Kostenlos starten</button>
     </div>
@@ -136,13 +138,13 @@
       <div class="plan-badge">Früher Zugang — 50% Rabatt</div>
       <h3>Pro</h3>
       <div class="price">€4,99 <span>/Monat</span></div>
-      <div class="early">Normalpreis €9,99 — nur für frühe Nutzer</div>
+      <div class="early">Sichere dir jetzt den halben Preis — für immer.</div>
       <ul>
         <li>Unbegrenzte Transaktionen</li>
         <li>EÜR Export</li>
-        <li>KI-Chat</li>
         <li>Belegscan</li>
         <li>Etsy Sync</li>
+        <li class="soon">KI-Steuerberater (bald)</li>
       </ul>
       <button class="btn-primary" style="width:100%" onclick="joinWaitlist()">Frühen Zugang sichern</button>
     </div>
