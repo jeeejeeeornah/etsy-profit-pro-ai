@@ -7,7 +7,7 @@ module.exports = async function(req, res) {
   try {
     const { userId } = req.body;
     if (!userId) return res.status(400).json({error: 'userId required'});
-    const r = await fetch('https://dajqkdztttavidnpijda.supabase.co/storage/v1/object/list/receipts', {method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+process.env.SUPABASE_SERVICE_KEY,'apikey':process.env.SUPABASE_SERVICE_KEY},body:JSON.stringify({prefix:userId+'/',limit:100,sortBy:{column:'created_at',order:'desc'}})});
+    const r = await fetch('https://dajqkdztttavidnpijda.supabase.co/storage/v1/object/list/receipts', {method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+process.env.SUPABASE_SERVICE_KEY,'apikey':process.env.SUPABASE_SERVICE_KEY},body:JSON.stringify({prefix:userId+'/',limit:100,sortBy:{column:'name',order:'desc'}})});
     const f = await r.json();
     console.log('Files:', JSON.stringify(f));
     const files = f.filter(item => item.id !== null);
