@@ -7,11 +7,11 @@ module.exports = async function(req, res) {
   try {
     const { userId } = req.body;
     if (!userId) return res.status(400).json({error: 'userId required'});
-    const r = await fetch('https://dajqkdztttavidnpijda.supabase.co/storage/v1/object/list/receipts', {method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+process.env.SUPABASE_SERVICE_KEY,'apikey':process.env.SUPABASE_SERVICE_KEY},body:JSON.stringify({prefix:'',limit:1,sortBy:{column:'created_at',order:'desc'}})});
+    const r = await fetch('https://dajqkdztttavidnpijda.supabase.co/storage/v1/object/list/receipts', {method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+process.env.SUPABASE_SERVICE_KEY,'apikey':process.env.SUPABASE_SERVICE_KEY},body:JSON.stringify({prefix:userId+'/',limit:1,sortBy:{column:'created_at',order:'desc'}})});
     const f = await r.json();
     console.log('Files:', JSON.stringify(f));
     if (!Array.isArray(f)||!f.length) return res.status(400).json({error:'no files',debug:f});
-    const url='https://dajqkdztttavidnpijda.supabase.co/storage/v1/object/public/receipts/'+f[0].name;
+    const url='https://dajqkdztttavidnpijda.supabase.co/storage/v1/object/public/receipts/'+userId+'/'+f[0].name;
     console.log('Image URL:', url);
     const imgRes = await fetch(url);
     const imgBuffer = await imgRes.arrayBuffer();
