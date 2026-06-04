@@ -11,7 +11,7 @@ module.exports = async function(req, res) {
     const f = await r.json();
     console.log('Files:', JSON.stringify(f));
     const files = f.filter(item => item.id !== null);
-    if (!files.length) return res.status(400).json({error:'no files',debug:f});
+  if (!files.length) return res.status(400).json({error:'no files',raw:f,userId:userId});
     const url='https://dajqkdztttavidnpijda.supabase.co/storage/v1/object/public/receipts/'+userId+'/'+files[0].name;
     console.log('Image URL:', url);
     const imgRes = await fetch(url);
