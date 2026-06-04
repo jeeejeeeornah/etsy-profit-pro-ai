@@ -10,8 +10,9 @@ module.exports = async function(req, res) {
     const r = await fetch('https://dajqkdztttavidnpijda.supabase.co/storage/v1/object/list/receipts', {method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+process.env.SUPABASE_SERVICE_KEY,'apikey':process.env.SUPABASE_SERVICE_KEY},body:JSON.stringify({prefix:userId+'/',limit:100,sortBy:{column:'name',order:'desc'}})});
     const f = await r.json();
     console.log('Files:', JSON.stringify(f));
+    console.log('UserId received:', userId);
     const files = f.filter(item => item.id !== null);
-  if (!files.length) return res.status(400).json({error:'no files',raw:f,userId:userId});
+    if (!files.length) return res.status(400).json({error:'no files',raw:f,userId:userId});
     const url='https://dajqkdztttavidnpijda.supabase.co/storage/v1/object/public/receipts/'+userId+'/'+files[0].name;
     console.log('Image URL:', url);
     const imgRes = await fetch(url);
