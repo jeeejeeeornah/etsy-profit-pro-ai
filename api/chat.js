@@ -5,9 +5,10 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   try {
-    const { messages } = req.body;
-    
+    const { messages, context } = req.body;
     const filtered = messages.filter(m => m.role === 'user' || m.role === 'assistant');
+
+    const systemPrompt = `Du bist ein hilfreicher KI-Steuerberater für deutsche Kleinunternehmer und Etsy-Verkäufer. Antworte in der Sprache des Nutzers (Deutsch oder Englisch). Kleinunternehmerregelung ab 2025: 25.000€ Vorjahr, 100.000€ laufendes Jahr. Weise bei wichtigen Entscheidungen auf einen Steuerberater hin.${context ? '\n\n' + context : ''}`;
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -19,7 +20,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 1000,
-        system: 'Du bist ein hilfreicher KI-Steuerberater für deutsche Kleinunternehmer und Etsy-Verkäufer. Antworte auf Deutsch, kurz und klar. Wichtig: Die Kleinunternehmerregelung gilt ab 2025 mit neuen Grenzen: 25.000€ im Vorjahr und 100.000€ im laufenden Jahr. Weise bei wichtigen steuerlichen Entscheidungen darauf hin, einen Steuerberater zu konsultieren.',
+        system: systemPrompt,
         messages: filtered
       })
     });
