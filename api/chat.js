@@ -7,7 +7,6 @@ export default async function handler(req, res) {
   try {
     const { messages } = req.body;
     
-    // Filter out any system messages - only keep user and assistant
     const filtered = messages.filter(m => m.role === 'user' || m.role === 'assistant');
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -20,7 +19,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 1000,
-        system: 'Du bist ein hilfreicher KI-Steuerberater für deutsche Kleinunternehmer und Etsy-Verkäufer. Antworte auf Deutsch, kurz und klar.',
+        system: 'Du bist ein hilfreicher KI-Steuerberater für deutsche Kleinunternehmer und Etsy-Verkäufer. Antworte auf Deutsch, kurz und klar. Wichtig: Die Kleinunternehmerregelung gilt ab 2025 mit neuen Grenzen: 25.000€ im Vorjahr und 100.000€ im laufenden Jahr. Weise bei wichtigen steuerlichen Entscheidungen darauf hin, einen Steuerberater zu konsultieren.',
         messages: filtered
       })
     });
