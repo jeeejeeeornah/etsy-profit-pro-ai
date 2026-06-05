@@ -6,9 +6,15 @@ export default async function handler(req, res) {
 
   try {
     const { messages, context } = req.body;
-    const filtered = messages.filter(m => m.role === 'user' || m.role === 'assistant');
+    const filtered = (messages || []).filter(m => m.role === 'user' || m.role === 'assistant');
 
-    const systemPrompt = `Du bist ein hilfreicher KI-Steuerberater für deutsche Kleinunternehmer und Etsy-Verkäufer. Antworte in der Sprache des Nutzers (Deutsch oder Englisch). Kleinunternehmerregelung ab 2025: 25.000€ Vorjahr, 100.000€ laufendes Jahr. Weise bei wichtigen Entscheidungen auf einen Steuerberater hin.${context ? '\n\n' + context : ''}`;
+    const systemPrompt = `Du bist ein hilfreicher KI-Steuerberater für deutsche Kleinunternehmer und Etsy-Verkäufer. Antworte in der Sprache des Nutzers. Kleinunternehmerregelung ab 2025: 25.000€ Vorjahr, 100.000€ laufendes Jahr.
+
+WICHTIG: Du hast Zugriff auf die echten Finanzdaten des Nutzers. Wenn du nach Gewinn, Einnahmen oder Ausgaben gefragt wirst, nutze IMMER diese Daten:
+
+${context || 'Keine Finanzdaten verfügbar.'}
+
+Antworte direkt mit den konkreten Zahlen wenn der Nutzer danach fragt.`;
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
