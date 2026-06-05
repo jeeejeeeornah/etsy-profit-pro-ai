@@ -3,8 +3,11 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
+
   try {
-    const { messages, system } = req.body;
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    const { messages, system } = body;
+
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -15,10 +18,11 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 1000,
-        system: system || 'Du bist ein hilfreicher KI-Steuerberater für deutsche Kleinunternehmer und Etsy-Verkäufer. Antworte auf Deutsch, kurz und klar. Gib praktische Hinweise zu Buchhaltung, Ausgaben und Steuern. Weise bei wichtigen steuerlichen Entscheidungen immer darauf hin, dass der Nutzer einen Steuerberater konsultieren sollte. Präsentiere KI-Antworten niemals als verbindliche Rechts- oder Steuerberatung.',
+        system: system || 'Du bist ein hilfreicher KI-Steuerberater für deutsche Kleinunternehmer und Etsy-Verkäufer. Antworte auf Deutsch, kurz und klar.',
         messages: messages
       })
     });
+
     const data = await response.json();
     res.status(200).json(data);
   } catch(e) {
