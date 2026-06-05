@@ -5,16 +5,8 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   try {
-    const { messages, context } = req.body;
+    const { messages, system } = req.body;
     const filtered = (messages || []).filter(m => m.role === 'user' || m.role === 'assistant');
-
-    const systemPrompt = `Du bist ein hilfreicher KI-Steuerberater für deutsche Kleinunternehmer und Etsy-Verkäufer. Antworte in der Sprache des Nutzers. Kleinunternehmerregelung ab 2025: 25.000€ Vorjahr, 100.000€ laufendes Jahr.
-
-WICHTIG: Du hast Zugriff auf die echten Finanzdaten des Nutzers. Wenn du nach Gewinn, Einnahmen oder Ausgaben gefragt wirst, nutze IMMER diese Daten:
-
-${context || 'Keine Finanzdaten verfügbar.'}
-
-Antworte direkt mit den konkreten Zahlen wenn der Nutzer danach fragt.`;
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -26,7 +18,7 @@ Antworte direkt mit den konkreten Zahlen wenn der Nutzer danach fragt.`;
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 1000,
-        system: systemPrompt,
+        system: system || 'Du bist ein hilfreicher KI-Steuerberater für deutsche Kleinunternehmer.',
         messages: filtered
       })
     });
