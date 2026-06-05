@@ -5,13 +5,10 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   try {
-    let messages, system;
-    if (req.body) {
-      messages = req.body.messages;
-      system = req.body.system;
-    } else {
-      return res.status(400).json({ error: 'No body received' });
-    }
+    const { messages } = req.body;
+    
+    // Filter out any system messages - only keep user and assistant
+    const filtered = messages.filter(m => m.role === 'user' || m.role === 'assistant');
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -23,8 +20,8 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 1000,
-        system: system || 'Du bist ein hilfreicher KI-Steuerberater für deutsche Kleinunternehmer.',
-        messages: messages
+        system: 'Du bist ein hilfreicher KI-Steuerberater für deutsche Kleinunternehmer und Etsy-Verkäufer. Antworte auf Deutsch, kurz und klar.',
+        messages: filtered
       })
     });
 
