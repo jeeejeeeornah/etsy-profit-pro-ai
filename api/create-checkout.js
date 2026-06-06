@@ -15,8 +15,8 @@ module.exports = async function(req, res) {
       line_items: [{ price: priceId, quantity: 1 }],
       customer_email: email,
       metadata: { userId },
-      success_url: 'https://etsy-profit-pro-ai.vercel.app/api/success',
-      cancel_url: 'https://etsy-profit-pro-ai.vercel.app/api/cancel',
+      success_url: 'https://klarergewinn.de/success',
+      cancel_url: 'https://klarergewinn.de/cancel',
     });
 
     res.status(200).json({ url: session.url });
