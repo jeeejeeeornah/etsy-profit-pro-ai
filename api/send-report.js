@@ -1,4 +1,4 @@
-const { Resend } = require('resend');
+const nodemailer = require('nodemailer');
 
 module.exports = async function(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -9,16 +9,24 @@ module.exports = async function(req, res) {
   try {
     const { email, subject, htmlBody, pdfBase64, filename } = req.body;
 
-    const resend = new Resend(process.env.RESEND_API_KEY);
+    const transporter = nodemailer.createTransporter({
+      host: process.env.BREVO_SMTP_HOST,
+      port: parseInt(process.env.BREVO_SMTP_PORT),
+      auth: {
+        user: process.env.BREVO_SMTP_LOGIN,
+        pass: process.env.BREVO_SMTP_PASSWORD,
+      }
+    });
 
-    await resend.emails.send({
-      from: 'onboarding@resend.dev',
+    await transporter.sendMail({
+      from: 'berichte@klarergewinn.de',
       to: email,
       subject: subject,
       html: htmlBody,
       attachments: pdfBase64 ? [{
         filename: filename || 'EUR-Bericht.pdf',
-        content: pdfBase64,
+        content: Buffer.from(pdfBase64, 'base64'),
+        contentType: 'application/pdf'
       }] : []
     });
 
