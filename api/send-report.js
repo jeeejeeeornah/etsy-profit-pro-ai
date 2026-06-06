@@ -1,5 +1,3 @@
-const nodemailer = require('nodemailer');
-
 module.exports = async function(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -9,27 +7,26 @@ module.exports = async function(req, res) {
   try {
     const { email, subject, htmlBody, pdfBase64, filename } = req.body;
 
-    const transporter = nodemailer.createTransporter({
-      host: process.env.BREVO_SMTP_HOST,
-      port: parseInt(process.env.BREVO_SMTP_PORT),
-      auth: {
-        user: process.env.BREVO_SMTP_LOGIN,
-        pass: process.env.BREVO_SMTP_PASSWORD,
-      }
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': process.env.BREVO_API_KEY,
+      },
+      body: JSON.stringify({
+        sender: { name: 'Klarer Gewinn', email: 'nath132@yahoo.com' },
+        to: [{ email: email }],
+        subject: subject,
+        htmlContent: htmlBody,
+        attachment: pdfBase64 ? [{
+          name: filename || 'EUR-Bericht.pdf',
+          content: pdfBase64,
+        }] : undefined
+      })
     });
 
-    await transporter.sendMail({
-      from: 'berichte@klarergewinn.de',
-      to: email,
-      subject: subject,
-      html: htmlBody,
-      attachments: pdfBase64 ? [{
-        filename: filename || 'EUR-Bericht.pdf',
-        content: Buffer.from(pdfBase64, 'base64'),
-        contentType: 'application/pdf'
-      }] : []
-    });
-
+    const data = await response.json();
+    if (!response.ok) return res.status(500).json({ error: data });
     res.status(200).json({ success: true });
   } catch(e) {
     res.status(500).json({ error: e.message });
