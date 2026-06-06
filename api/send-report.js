@@ -8,16 +8,16 @@ module.exports = async function(req, res) {
 
   try {
     const { email, subject, htmlBody, pdfBase64, filename } = req.body;
-    
+
     const resend = new Resend(process.env.RESEND_API_KEY);
-    
+
     await resend.emails.send({
-      from: from: 'onboarding@resend.dev',
+      from: 'onboarding@resend.dev',
       to: email,
       subject: subject,
       html: htmlBody,
       attachments: pdfBase64 ? [{
-        filename: filename || 'EÜR-Bericht.pdf',
+        filename: filename || 'EUR-Bericht.pdf',
         content: pdfBase64,
       }] : []
     });
