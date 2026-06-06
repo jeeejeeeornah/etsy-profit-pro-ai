@@ -29,21 +29,24 @@
   .early-access span { color: #00D4AA; font-weight: 600; }
   .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; max-width: 1000px; margin: 0 auto 80px; padding: 0 40px; }
   .feature { background: #1A1F2E; border: 1px solid #2D3548; border-radius: 16px; padding: 28px; }
+  .feature.dimmed { opacity: 0.5; }
   .feature-icon { font-size: 28px; margin-bottom: 12px; }
   .feature h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
   .feature p { font-size: 14px; color: #8B9DC3; }
-  .coming-soon-badge { display: inline-block; background: #2D3548; border-radius: 8px; padding: 2px 8px; font-size: 11px; color: #8B9DC3; margin-left: 8px; vertical-align: middle; }
+  .coming-soon-badge { display: inline-block; background: #FF6B2B; border-radius: 8px; padding: 2px 8px; font-size: 11px; color: #fff; margin-left: 8px; vertical-align: middle; }
   .pricing { text-align: center; padding: 80px 20px; background: #1A1F2E; }
   .pricing h2 { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
   .pricing p { color: #8B9DC3; margin-bottom: 48px; }
   .plans { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
   .plan { background: #0D1117; border: 1px solid #2D3548; border-radius: 16px; padding: 32px; width: 280px; text-align: left; position: relative; }
   .plan.featured { border-color: #6C63FF; }
+  .plan.business { border-color: #FFB800; }
   .plan-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #6C63FF; border-radius: 20px; padding: 4px 16px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .plan-badge.gold { background: #FFB800; color: #000; }
   .plan h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
   .plan .price { font-size: 36px; font-weight: 800; margin-bottom: 4px; }
   .plan .price span { font-size: 16px; color: #8B9DC3; font-weight: 400; }
-  .plan .early { font-size: 13px; color: #00D4AA; margin-bottom: 24px; }
+  .plan .sub { font-size: 13px; color: #8B9DC3; margin-bottom: 24px; }
   .plan ul { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
   .plan ul li { font-size: 14px; color: #8B9DC3; display: flex; align-items: center; gap: 8px; }
   .plan ul li::before { content: '✓'; color: #00D4AA; font-weight: 700; }
@@ -55,6 +58,8 @@
   .footer-links a:hover { color: #fff; }
   .footer p { font-size: 12px; color: #8B9DC3; }
   .success { display: none; background: #00D4AA20; border: 1px solid #00D4AA; border-radius: 12px; padding: 12px 20px; color: #00D4AA; font-size: 14px; margin-top: 12px; text-align: center; }
+  .appstore-btn { display: inline-block; margin-top: 20px; }
+  .appstore-btn img { height: 48px; }
 </style>
 </head>
 <body>
@@ -73,15 +78,17 @@
 </nav>
 
 <section class="hero">
-  <div class="badge">🚀 Demnächst verfügbar</div>
-  <h1>Buchhaltung für<br><span>Selbstständige</span><br>so einfach wie nie.</h1>
-  <p>Einnahmen tracken, Ausgaben erfassen, EÜR exportieren — alles in einer App. Speziell für Kleinunternehmer und Etsy-Verkäufer in Deutschland.</p>
+  <div class="badge">🚀 Jetzt im App Store</div>
+  <h1>Buchhaltung in<br><span>dem Moment</span>,<br>nicht am Ende des Monats.</h1>
+  <p>Einnahmen tracken, Belege scannen, EÜR exportieren — alles in einer App. Speziell für Kleinunternehmer in Deutschland.</p>
   <div class="waitlist">
     <input type="email" id="email" placeholder="deine@email.de" />
-    <button class="btn-primary" onclick="joinWaitlist()">Frühen Zugang sichern</button>
+    <button class="btn-primary" onclick="joinWaitlist()">Benachrichtigung erhalten</button>
   </div>
   <div class="success" id="success">✓ Du bist auf der Liste! Wir melden uns bald.</div>
-  <p class="early-access">🎉 Frühe Nutzer erhalten <span>50% Rabatt</span> auf das Pro-Abo für immer.</p>
+  <a class="appstore-btn" href="https://apps.apple.com/app/klarer-gewinn" target="_blank">
+    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Im App Store laden">
+  </a>
 </section>
 
 <div class="features" id="features">
@@ -93,7 +100,12 @@
   <div class="feature">
     <div class="feature-icon">📸</div>
     <h3>KI-Belegscan</h3>
-    <p>Foto machen — fertig. Die KI erkennt Betrag, Kategorie und Datum automatisch.</p>
+    <p>Foto machen — fertig. Die KI erkennt Betrag, Kategorie und Datum automatisch. GoBD-konform archiviert.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">🤖</div>
+    <h3>KI-Steuerberater</h3>
+    <p>Dein persönlicher KI-Assistent für Steuerfragen — kennt deine echten Zahlen und antwortet auf Deutsch.</p>
   </div>
   <div class="feature">
     <div class="feature-icon">📄</div>
@@ -101,19 +113,34 @@
     <p>Professionelle Einnahmenüberschussrechnung mit §19 UStG Hinweis. Bereit für den Steuerberater.</p>
   </div>
   <div class="feature">
-    <div class="feature-icon">🛍️</div>
-    <h3>Etsy Integration</h3>
-    <p>Etsy-Bestellungen automatisch importieren. Kein manuelles Eingeben mehr.</p>
-  </div>
-  <div class="feature">
     <div class="feature-icon">⚠️</div>
     <h3>Kleinunternehmer-Warnung</h3>
-    <p>Automatische Warnung wenn du dich der €25.000 Grenze näherst.</p>
+    <p>Automatische Warnung wenn du dich der €25.000 Grenze näherst. Nie wieder eine böse Überraschung.</p>
   </div>
   <div class="feature">
-    <div class="feature-icon">🤖</div>
-    <h3>KI-Steuerberater <span class="coming-soon-badge">Demnächst</span></h3>
-    <p>Dein persönlicher KI-Assistent für Steuerfragen — bald verfügbar.</p>
+    <div class="feature-icon">📋</div>
+    <h3>Rechnungen & Angebote</h3>
+    <p>Professionelle PDF-Rechnungen erstellen und teilen. Mit §19 UStG Hinweis und deinem Logo.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">🚗</div>
+    <h3>Fahrtenbuch</h3>
+    <p>Geschäftsfahrten erfassen, €0,30/km automatisch berechnet und als Fahrtkosten gebucht.</p>
+  </div>
+  <div class="feature dimmed">
+    <div class="feature-icon">🛍️</div>
+    <h3>Etsy Integration <span class="coming-soon-badge">Demnächst</span></h3>
+    <p>Etsy-Bestellungen automatisch importieren. Kein manuelles Eingeben mehr.</p>
+  </div>
+  <div class="feature dimmed">
+    <div class="feature-icon">📦</div>
+    <h3>Amazon Integration <span class="coming-soon-badge">Demnächst</span></h3>
+    <p>Amazon-Einnahmen automatisch importieren und kategorisieren.</p>
+  </div>
+  <div class="feature dimmed">
+    <div class="feature-icon">🏦</div>
+    <h3>DATEV Export <span class="coming-soon-badge">Demnächst</span></h3>
+    <p>Direktexport für deinen Steuerberater im DATEV-Format. Business-Feature.</p>
   </div>
 </div>
 
@@ -124,29 +151,47 @@
     <div class="plan">
       <h3>Free</h3>
       <div class="price">€0 <span>/Monat</span></div>
-      <div class="early">&nbsp;</div>
+      <div class="sub">Zum Ausprobieren</div>
       <ul>
         <li>10 Transaktionen pro Monat</li>
-        <li>EÜR Export</li>
-        <li class="no">Belegscan</li>
-        <li class="no">Etsy Sync</li>
-        <li class="soon">KI-Steuerberater (bald)</li>
+        <li>Dashboard & Übersicht</li>
+        <li class="no">KI-Belegscan</li>
+        <li class="no">KI-Steuerberater</li>
+        <li class="no">EÜR Export</li>
+        <li class="no">Rechnungen</li>
       </ul>
       <button class="btn-primary" style="width:100%;background:#2D3548" onclick="joinWaitlist()">Kostenlos starten</button>
     </div>
     <div class="plan featured">
-      <div class="plan-badge">Früher Zugang — 50% Rabatt</div>
+      <div class="plan-badge">Beliebteste Wahl</div>
       <h3>Pro</h3>
-      <div class="price">€4,99 <span>/Monat</span></div>
-      <div class="early">Sichere dir jetzt den halben Preis — für immer.</div>
+      <div class="price">€9,99 <span>/Monat</span></div>
+      <div class="sub">Für Freelancer & Etsy-Verkäufer</div>
       <ul>
         <li>Unbegrenzte Transaktionen</li>
-        <li>EÜR Export</li>
-        <li>Belegscan</li>
-        <li>Etsy Sync</li>
-        <li class="soon">KI-Steuerberater (bald)</li>
+        <li>KI-Belegscan (GoBD)</li>
+        <li>KI-Steuerberater</li>
+        <li>EÜR Export & E-Mail</li>
+        <li>Fahrtenbuch</li>
+        <li class="no">Mehrere Unternehmen</li>
+        <li class="no">Rechnungsgenerator</li>
       </ul>
-      <button class="btn-primary" style="width:100%" onclick="joinWaitlist()">Frühen Zugang sichern</button>
+      <button class="btn-primary" style="width:100%" onclick="joinWaitlist()">Jetzt starten</button>
+    </div>
+    <div class="plan business">
+      <div class="plan-badge gold">Business</div>
+      <h3>Business</h3>
+      <div class="price">€27,99 <span>/Monat</span></div>
+      <div class="sub">Für mehrere Betriebe & Handwerk</div>
+      <ul>
+        <li>Alles aus Pro</li>
+        <li>Mehrere Unternehmen</li>
+        <li>Rechnungen & Angebote (PDF)</li>
+        <li>LV & VOB/B Verträge</li>
+        <li>Zusatzleistungen</li>
+        <li class="soon">DATEV Export (demnächst)</li>
+      </ul>
+      <button class="btn-primary" style="width:100%;background:#FFB800;color:#000" onclick="joinWaitlist()">Business starten</button>
     </div>
   </div>
 </section>
@@ -161,7 +206,7 @@
 
 <script>
 const SUPABASE_URL = 'https://dajqkdztttavidnpijda.supabase.co';
-const SUPABASE_ANON = 'sb_publishable_q1zA5Js3wqgCaZ1IoN2nww_eeFdBVNT'
+const SUPABASE_ANON = 'sb_publishable_q1zA5Js3wqgCaZ1IoN2nww_eeFdBVNT';
 async function joinWaitlist() {
   const email = document.getElementById('email').value.trim();
   if (!email || !email.includes('@')) {
@@ -183,9 +228,7 @@ async function joinWaitlist() {
       document.getElementById('success').style.display = 'block';
       document.getElementById('email').value = '';
     }
-  } catch(e) {
-    console.error(e);
-  }
+  } catch(e) { console.error(e); }
 }
 </script>
 
