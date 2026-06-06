@@ -12,7 +12,7 @@ module.exports = async function(req, res) {
     const resend = new Resend(process.env.RESEND_API_KEY);
     
     await resend.emails.send({
-      from: 'berichte@klarergewinn.de',
+      from: from: 'onboarding@resend.dev',
       to: email,
       subject: subject,
       html: htmlBody,
