@@ -14,7 +14,7 @@ module.exports = async function(req, res) {
         'api-key': process.env.BREVO_API_KEY,
       },
       body: JSON.stringify({
-        sender: { name: 'Klarer Gewinn', email: 'jeeejeeornah@gmail.com' },
+        sender: { name: 'Klarer Gewinn', email: 'hello@klarergewinn.de' },
         to: [{ email: email }],
         subject: subject,
         htmlContent: htmlBody,
