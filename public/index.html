@@ -3,241 +3,950 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Klarer Gewinn — Buchhaltung für Selbstständige</title>
+<title>Klarer Gewinn — KI-Buchhaltung für Selbstständige in Deutschland</title>
+<meta name="description" content="GoBD-konforme Buchhaltungs-App für Selbstständige, Handwerker und Gastronomen. KI-Belegscan, DATEV-Export, §19 UStG. Jetzt im App Store.">
+<meta property="og:title" content="Klarer Gewinn — Buchhaltung in dem Moment">
+<meta property="og:description" content="Die KI-Buchhaltungs-App für Selbstständige in Deutschland. GoBD-konform. DATEV-ready. Steuerberater-freundlich.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://klarergewinn.de">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #0D1117; color: #fff; font-family: Inter, Arial, sans-serif; line-height: 1.6; }
-  nav { display: flex; justify-content: space-between; align-items: flex-end; padding: 0 40px; border-bottom: 1px solid #2D3548; height: 110px; }
-  .logo { display: flex; align-items: flex-end; gap: 14px; }
-  .logo img { width: 112px; height: 112px; margin-bottom: -1px; }
-  .logo span { font-size: 26px; font-weight: 800; color: #fff; padding-bottom: 22px; }
-  .nav-links { display: flex; gap: 24px; align-items: center; padding-bottom: 22px; }
-  .nav-links a { color: #8B9DC3; text-decoration: none; font-size: 14px; }
-  .nav-links a:hover { color: #fff; }
-  .hero { text-align: center; padding: 100px 20px 80px; max-width: 800px; margin: 0 auto; }
-  .badge { display: inline-block; background: #1A1F2E; border: 1px solid #2D3548; border-radius: 20px; padding: 6px 16px; font-size: 12px; color: #6C63FF; margin-bottom: 24px; letter-spacing: 1px; text-transform: uppercase; }
-  .hero h1 { font-size: 52px; font-weight: 800; line-height: 1.15; margin-bottom: 20px; }
-  .hero h1 span { color: #6C63FF; }
-  .hero p { font-size: 18px; color: #8B9DC3; margin-bottom: 40px; max-width: 560px; margin-left: auto; margin-right: auto; }
-  .waitlist { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
-  .waitlist input { background: #1A1F2E; border: 1px solid #2D3548; border-radius: 12px; padding: 14px 20px; color: #fff; font-size: 15px; width: 300px; outline: none; }
-  .waitlist input:focus { border-color: #6C63FF; }
-  .waitlist input::placeholder { color: #8B9DC3; }
-  .btn-primary { background: #6C63FF; border: none; border-radius: 12px; padding: 14px 28px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
-  .btn-primary:hover { opacity: 0.85; }
-  .early-access { font-size: 13px; color: #8B9DC3; margin-bottom: 60px; }
-  .early-access span { color: #00D4AA; font-weight: 600; }
-  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; max-width: 1000px; margin: 0 auto 80px; padding: 0 40px; }
-  .feature { background: #1A1F2E; border: 1px solid #2D3548; border-radius: 16px; padding: 28px; }
-  .feature.dimmed { opacity: 0.5; }
-  .feature-icon { font-size: 28px; margin-bottom: 12px; }
-  .feature h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-  .feature p { font-size: 14px; color: #8B9DC3; }
-  .coming-soon-badge { display: inline-block; background: #FF6B2B; border-radius: 8px; padding: 2px 8px; font-size: 11px; color: #fff; margin-left: 8px; vertical-align: middle; }
-  .pricing { text-align: center; padding: 80px 20px; background: #1A1F2E; }
-  .pricing h2 { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
-  .pricing p { color: #8B9DC3; margin-bottom: 48px; }
-  .plans { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
-  .plan { background: #0D1117; border: 1px solid #2D3548; border-radius: 16px; padding: 32px; width: 280px; text-align: left; position: relative; }
-  .plan.featured { border-color: #6C63FF; }
-  .plan.business { border-color: #FFB800; }
-  .plan-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #6C63FF; border-radius: 20px; padding: 4px 16px; font-size: 12px; font-weight: 600; white-space: nowrap; }
-  .plan-badge.gold { background: #FFB800; color: #000; }
-  .plan h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
-  .plan .price { font-size: 36px; font-weight: 800; margin-bottom: 4px; }
-  .plan .price span { font-size: 16px; color: #8B9DC3; font-weight: 400; }
-  .plan .sub { font-size: 13px; color: #8B9DC3; margin-bottom: 24px; }
-  .plan ul { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
-  .plan ul li { font-size: 14px; color: #8B9DC3; display: flex; align-items: center; gap: 8px; }
-  .plan ul li::before { content: '✓'; color: #00D4AA; font-weight: 700; }
-  .plan ul li.no::before { content: '✕'; color: #FF6B6B; }
-  .plan ul li.soon::before { content: '🔜'; }
-  .footer { text-align: center; padding: 40px 20px; border-top: 1px solid #2D3548; }
-  .footer-links { display: flex; gap: 24px; justify-content: center; margin-bottom: 16px; }
-  .footer-links a { color: #8B9DC3; text-decoration: none; font-size: 13px; }
-  .footer-links a:hover { color: #fff; }
-  .footer p { font-size: 12px; color: #8B9DC3; }
-  .success { display: none; background: #00D4AA20; border: 1px solid #00D4AA; border-radius: 12px; padding: 12px 20px; color: #00D4AA; font-size: 14px; margin-top: 12px; text-align: center; }
-  .appstore-btn { display: inline-block; margin-top: 20px; }
-  .appstore-btn img { height: 48px; }
-  a { text-decoration: none; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08090E;--surface:#111318;--surface2:#1A1D26;--border:#232736;
+  --purple:#6C63FF;--purple-light:#8B85FF;--green:#00C896;--gold:#FFB800;
+  --text:#FFFFFF;--text-muted:#8B9DC3;--text-dim:#4A5270;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{display:block}
+
+/* ── Fade-in ── */
+.fi{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease}
+.fi.vis{opacity:1;transform:translateY(0)}
+.fi.d1{transition-delay:.1s}.fi.d2{transition-delay:.2s}.fi.d3{transition-delay:.3s}
+.fi.d4{transition-delay:.4s}.fi.d5{transition-delay:.5s}
+
+/* ── Shared ── */
+.wrap{max-width:1200px;margin:0 auto;padding:0 40px}
+.lbl{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--purple-light);margin-bottom:14px}
+
+/* ══════════════════════════════════════
+   NAV
+══════════════════════════════════════ */
+#nav{position:sticky;top:0;z-index:200;height:68px;background:rgba(8,9,14,.88);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);transition:background .3s}
+#nav.scrolled{background:rgba(8,9,14,.97)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 40px;height:100%;
+  display:flex;align-items:center;gap:0}
+.nav-logo{display:flex;align-items:center;gap:10px;flex-shrink:0;margin-right:36px}
+.nav-logo img{height:32px;width:32px;object-fit:contain}
+.nav-logo-text{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.nav-links{display:flex;align-items:center;gap:26px;list-style:none;flex:1}
+.nav-links a{font-size:14px;font-weight:500;color:var(--text-muted);transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-right{display:flex;align-items:center;gap:10px;margin-left:auto}
+.nav-appstore{display:flex;align-items:center;gap:7px;border:1px solid var(--border);
+  border-radius:10px;padding:8px 14px;font-size:13px;font-weight:600;color:var(--text);
+  transition:border-color .2s,background .2s;white-space:nowrap}
+.nav-appstore:hover{border-color:var(--purple);background:rgba(108,99,255,.07)}
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:6px;color:var(--text);flex-shrink:0}
+.mobile-menu{display:none;position:absolute;top:68px;left:0;right:0;
+  background:var(--surface);border-bottom:1px solid var(--border);padding:20px 40px 24px;z-index:199}
+.mobile-menu.open{display:block}
+.mobile-menu ul{list-style:none;display:flex;flex-direction:column;gap:14px}
+.mobile-menu a{font-size:15px;color:var(--text-muted);transition:color .2s}
+.mobile-menu a:hover{color:var(--text)}
+
+/* ══════════════════════════════════════
+   HERO
+══════════════════════════════════════ */
+.hero{min-height:100vh;display:flex;align-items:center;padding:80px 0 60px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-180px;right:-120px;width:680px;height:680px;
+  background:radial-gradient(circle,rgba(108,99,255,.13) 0%,transparent 62%);pointer-events:none}
+.hero-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:grid;
+  grid-template-columns:60fr 40fr;gap:72px;align-items:center;width:100%}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(108,99,255,.1);
+  border:1px solid rgba(108,99,255,.3);border-radius:40px;padding:6px 16px;
+  font-size:13px;font-weight:600;color:#A89FFF;margin-bottom:28px}
+.hero h1{font-size:clamp(38px,5vw,64px);font-weight:900;line-height:1.07;
+  letter-spacing:-2px;color:var(--text);margin-bottom:24px}
+.hero h1 .ac{color:var(--purple)}
+.hero-sub{font-size:17px;color:var(--text-muted);line-height:1.72;max-width:500px;margin-bottom:38px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:30px}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--purple);color:#fff;
+  padding:14px 26px;border-radius:14px;font-size:15px;font-weight:700;border:none;cursor:pointer;
+  box-shadow:0 8px 28px rgba(108,99,255,.35);transition:transform .15s,box-shadow .15s;font-family:inherit}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(108,99,255,.45)}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);
+  color:var(--text);padding:14px 22px;border-radius:14px;font-size:15px;font-weight:600;
+  transition:border-color .2s,background .2s}
+.btn-ghost:hover{border-color:var(--purple);background:rgba(108,99,255,.07)}
+.trust-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.trust-item{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--text-muted)}
+.trust-item .ck{color:var(--green);font-weight:700}
+
+/* Phone mockup */
+.phone-wrap{position:relative;display:flex;justify-content:center;align-items:center;padding:20px 0}
+.phone-glow{position:absolute;width:320px;height:420px;
+  background:radial-gradient(circle,rgba(108,99,255,.22) 0%,transparent 65%);pointer-events:none}
+.phone{position:relative;width:262px;background:#0C0D13;border-radius:44px;
+  border:2px solid #262837;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(255,255,255,.04) inset,0 40px 80px rgba(0,0,0,.7),0 0 60px rgba(108,99,255,.1)}
+.phone-notch{position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:96px;height:26px;background:#0C0D13;border-radius:0 0 18px 18px;z-index:10}
+.pscr{padding:34px 15px 22px}
+.ph-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;margin-top:8px}
+.ph-greet{font-size:12px;font-weight:600;color:var(--text-muted)}
+.ph-card{background:linear-gradient(135deg,rgba(108,99,255,.16),rgba(108,99,255,.06));
+  border:1px solid rgba(108,99,255,.24);border-radius:14px;padding:14px;margin-bottom:10px}
+.ph-card-lbl{font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.ph-amount{font-size:24px;font-weight:800;color:var(--green);letter-spacing:-1px;margin-bottom:8px}
+.ph-track{background:rgba(255,255,255,.08);border-radius:4px;height:4px;margin-bottom:5px}
+.ph-fill{background:linear-gradient(90deg,var(--purple),var(--green));border-radius:4px;height:4px;width:68%}
+.ph-prog{font-size:9px;color:var(--text-muted)}
+.ph-stats{display:flex;gap:7px;margin-bottom:10px}
+.ph-stat{flex:1;background:var(--surface2);border-radius:9px;padding:9px 10px}
+.ph-stat-v{font-size:13px;font-weight:700;margin-bottom:1px}
+.ph-stat-v.inc{color:var(--green)}.ph-stat-v.exp{color:#FF6B6B}
+.ph-stat-l{font-size:8px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.3px}
+.ph-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.ph-act{background:var(--surface2);border-radius:7px;padding:7px 3px;font-size:8.5px;
+  font-weight:600;color:var(--text-muted);text-align:center}
+.ph-act.p{background:rgba(108,99,255,.2);color:var(--purple-light)}
+.ph-badge{position:absolute;display:flex;align-items:center;gap:5px;border-radius:30px;
+  padding:7px 12px;font-size:11px;font-weight:700;
+  backdrop-filter:blur(8px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.ph-badge.ai{top:56px;right:-18px;background:rgba(108,99,255,.88);color:#fff;
+  border:1px solid rgba(139,133,255,.5)}
+.ph-badge.gobd{bottom:72px;left:-18px;background:rgba(0,200,150,.14);color:var(--green);
+  border:1px solid rgba(0,200,150,.35)}
+
+/* ══════════════════════════════════════
+   STATS BAR
+══════════════════════════════════════ */
+.stats-bar{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:30px 0}
+.stats-inner{max-width:1200px;margin:0 auto;padding:0 40px;
+  display:grid;grid-template-columns:repeat(4,1fr)}
+.stat{text-align:center;padding:8px 20px;border-right:1px solid var(--border)}
+.stat:last-child{border-right:none}
+.stat-n{font-size:30px;font-weight:900;letter-spacing:-1px;margin-bottom:3px}
+.stat-d{font-size:13px;color:var(--text-muted)}
+
+/* ══════════════════════════════════════
+   SPOTLIGHTS
+══════════════════════════════════════ */
+.spotlight{padding:100px 0;border-bottom:1px solid var(--border)}
+.sp-inner{max-width:1200px;margin:0 auto;padding:0 40px;
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.sp-inner.rev .sp-text{order:2}.sp-inner.rev .sp-visual{order:1}
+.sp-text h2{font-size:clamp(28px,3.5vw,44px);font-weight:800;letter-spacing:-1px;line-height:1.15;margin-bottom:20px}
+.sp-text .body{font-size:16px;color:var(--text-muted);line-height:1.75;margin-bottom:30px}
+.sp-list{list-style:none;display:flex;flex-direction:column;gap:11px}
+.sp-list li{display:flex;align-items:flex-start;gap:10px;font-size:14px}
+.sp-list li .ck{color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+
+/* Scanner visual */
+.scan-visual{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden}
+.scan-hdr{display:flex;align-items:center;justify-content:space-between;
+  padding:13px 18px;border-bottom:1px solid var(--border)}
+.scan-hdr span{font-size:12px;color:var(--text-muted)}
+.scan-hdr .scan-t{font-size:13px;font-weight:600;color:var(--text)}
+.scan-vp{padding:22px;background:var(--bg)}
+.scan-frame{border:2px solid var(--purple);border-radius:12px;padding:18px;position:relative;margin-bottom:14px;overflow:hidden}
+.scan-corner{position:absolute;width:20px;height:20px;border-color:var(--green);border-style:solid}
+.sc-tl{top:-1px;left:-1px;border-width:3px 0 0 3px;border-radius:4px 0 0 0}
+.sc-tr{top:-1px;right:-1px;border-width:3px 3px 0 0;border-radius:0 4px 0 0}
+.sc-bl{bottom:-1px;left:-1px;border-width:0 0 3px 3px;border-radius:0 0 0 4px}
+.sc-br{bottom:-1px;right:-1px;border-width:0 3px 3px 0;border-radius:0 0 4px 0}
+.scan-anim{position:absolute;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--green),transparent);
+  animation:scanline 2s ease-in-out infinite}
+@keyframes scanline{0%{top:5%;opacity:0}15%{opacity:1}85%{opacity:1}100%{top:95%;opacity:0}}
+.scan-lines{display:flex;flex-direction:column;gap:7px;position:relative;z-index:1}
+.sl{height:8px;background:var(--surface2);border-radius:4px}
+.sl.f{width:100%}.sl.m{width:75%}.sl.s{width:55%}
+.sl.amt{height:14px;width:45%;background:rgba(0,200,150,.2)}
+.scan-store{font-size:11px;color:var(--text-muted);margin-bottom:10px}
+.scan-result{display:flex;align-items:center;gap:12px;background:rgba(0,200,150,.09);
+  border:1px solid rgba(0,200,150,.25);border-radius:11px;padding:12px 14px}
+.s-check{width:28px;height:28px;background:var(--green);color:var(--bg);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0}
+.s-r1{font-size:13px;font-weight:600}
+.s-r2{font-size:11px;color:var(--text-muted)}
+
+/* Chat visual */
+.chat-visual{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px}
+.chat-hdr{display:flex;align-items:center;gap:10px;padding-bottom:16px;
+  border-bottom:1px solid var(--border);margin-bottom:16px}
+.chat-ava{width:36px;height:36px;background:rgba(108,99,255,.2);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.chat-name{font-size:14px;font-weight:600}
+.chat-status{font-size:11px;color:var(--green)}
+.chat-msgs{display:flex;flex-direction:column;gap:10px}
+.cb{padding:11px 14px;border-radius:14px;font-size:13px;line-height:1.55;max-width:88%}
+.cb.u{background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.25);
+  align-self:flex-end;border-bottom-right-radius:4px}
+.cb.a{background:var(--surface2);border:1px solid var(--border);
+  align-self:flex-start;border-bottom-left-radius:4px}
+.cb.a strong{color:var(--green)}
+
+/* ══════════════════════════════════════
+   BRANCHEN
+══════════════════════════════════════ */
+.branchen{padding:100px 0}
+.branchen-hdr{text-align:center;margin-bottom:56px}
+.branchen-hdr h2{font-size:clamp(26px,3.5vw,40px);font-weight:800;letter-spacing:-1px;margin-bottom:14px}
+.branchen-hdr p{font-size:16px;color:var(--text-muted);max-width:540px;margin:0 auto;line-height:1.65}
+.branchen-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.b-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;
+  transition:border-color .2s,transform .2s,box-shadow .2s;cursor:default}
+.b-card:hover{border-color:var(--purple);transform:translateY(-4px);
+  box-shadow:0 16px 48px rgba(108,99,255,.12)}
+.b-emoji{font-size:34px;display:block;margin-bottom:14px}
+.b-name{font-size:16px;font-weight:700;margin-bottom:7px}
+.b-desc{font-size:13px;color:var(--text-muted);line-height:1.6}
+
+/* ══════════════════════════════════════
+   FEATURES GRID
+══════════════════════════════════════ */
+.feat-sec{padding:100px 0;background:var(--surface);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.feat-hdr{text-align:center;margin-bottom:52px}
+.feat-hdr h2{font-size:clamp(26px,3.5vw,40px);font-weight:800;letter-spacing:-1px;margin-bottom:12px}
+.feat-hdr p{font-size:16px;color:var(--text-muted)}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.fc{background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:26px;
+  transition:border-color .2s}
+.fc:hover{border-color:rgba(108,99,255,.4)}
+.fc.wide{grid-column:span 2}
+.fc-icon{width:40px;height:40px;background:rgba(108,99,255,.12);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:var(--purple-light)}
+.fc-name{font-size:15px;font-weight:700;margin-bottom:7px}
+.fc-desc{font-size:13px;color:var(--text-muted);line-height:1.6}
+.feat-row3{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* ══════════════════════════════════════
+   PRICING
+══════════════════════════════════════ */
+.pricing{padding:100px 0}
+.price-hdr{text-align:center;margin-bottom:44px}
+.price-hdr h2{font-size:clamp(26px,3.5vw,44px);font-weight:800;letter-spacing:-1px;margin-bottom:12px}
+.price-hdr p{font-size:16px;color:var(--text-muted);margin-bottom:28px}
+.price-toggle{display:inline-flex;background:var(--surface);border:1px solid var(--border);
+  border-radius:40px;padding:4px}
+.tog{background:none;border:none;border-radius:36px;padding:8px 20px;font-size:14px;
+  font-weight:600;color:var(--text-muted);cursor:pointer;transition:background .2s,color .2s;
+  position:relative;font-family:inherit}
+.tog.on{background:var(--surface2);color:var(--text)}
+.tog .save{position:absolute;top:-9px;right:-4px;background:var(--green);color:#000;
+  font-size:9px;font-weight:700;border-radius:8px;padding:2px 5px}
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start;margin-top:0}
+.plan{background:var(--surface);border:1px solid var(--border);border-radius:20px;
+  padding:36px 28px;position:relative}
+.plan.pro{border-color:var(--purple);
+  background:linear-gradient(160deg,rgba(108,99,255,.09) 0%,var(--surface) 55%);
+  box-shadow:0 0 0 1px rgba(108,99,255,.15),0 24px 64px rgba(108,99,255,.12);transform:scale(1.02)}
+.plan.biz{border-color:rgba(255,184,0,.4)}
+.plan-top-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  font-size:11px;font-weight:700;letter-spacing:.5px;padding:4px 14px;border-radius:20px;white-space:nowrap}
+.plan-top-badge.pop{background:var(--purple);color:#fff}
+.plan-top-badge.gld{background:var(--gold);color:#000}
+.plan-tier{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:10px}
+.plan.pro .plan-tier{color:var(--purple-light)}
+.plan.biz .plan-tier{color:var(--gold)}
+.plan-price-row .amt{font-size:44px;font-weight:900;letter-spacing:-2px}
+.plan-price-row .per{font-size:16px;color:var(--text-muted);font-weight:400}
+.plan-billing{font-size:12px;color:var(--text-muted);margin:6px 0 14px;min-height:16px}
+.plan-desc{font-size:13px;color:var(--text-muted);line-height:1.55;padding-bottom:20px;
+  border-bottom:1px solid var(--border);margin-bottom:20px}
+.plan-feats{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.plan-feats li{display:flex;align-items:flex-start;gap:9px;font-size:13px}
+.plan-feats li .t{color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+.plan-feats li .x{color:var(--text-dim);flex-shrink:0;margin-top:1px}
+.plan-feats li.off{color:var(--text-dim)}
+.plan-btn{display:block;text-align:center;padding:13px;border-radius:12px;
+  font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:opacity .2s,transform .15s}
+.plan-btn.pp{background:var(--purple);color:#fff;box-shadow:0 6px 20px rgba(108,99,255,.3)}
+.plan-btn.pp:hover{opacity:.9;transform:translateY(-1px)}
+.plan-btn.pg{background:transparent;border:1px solid var(--border);color:var(--text)}
+.plan-btn.pg:hover{border-color:var(--purple);background:rgba(108,99,255,.06)}
+.plan-btn.pb{background:var(--gold);color:#000}
+.plan-btn.pb:hover{opacity:.9}
+.price-note{text-align:center;margin-top:28px;font-size:13px;color:var(--text-muted)}
+
+/* ══════════════════════════════════════
+   TRUST
+══════════════════════════════════════ */
+.trust{padding:80px 0;background:var(--surface);border-top:1px solid var(--border)}
+.trust-hdr{text-align:center;margin-bottom:52px}
+.trust-hdr h2{font-size:clamp(22px,3vw,36px);font-weight:800;letter-spacing:-.8px;margin-bottom:10px}
+.trust-hdr p{font-size:16px;color:var(--text-muted)}
+.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.tb{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:24px 20px;text-align:center}
+.tb-icon{font-size:28px;margin-bottom:10px}
+.tb-title{font-size:14px;font-weight:700;margin-bottom:6px}
+.tb-desc{font-size:12px;color:var(--text-muted);line-height:1.5}
+
+/* ══════════════════════════════════════
+   CTA BOTTOM
+══════════════════════════════════════ */
+.cta-bottom{padding:100px 40px;background:linear-gradient(135deg,#6C63FF 0%,#4A44CC 100%);
+  text-align:center;position:relative;overflow:hidden}
+.cta-bottom::before{content:'';position:absolute;top:-80px;right:-80px;width:380px;height:380px;
+  background:radial-gradient(circle,rgba(255,255,255,.09) 0%,transparent 60%);pointer-events:none}
+.cta-bottom::after{content:'';position:absolute;bottom:-60px;left:-60px;width:300px;height:300px;
+  background:radial-gradient(circle,rgba(0,0,0,.15) 0%,transparent 60%);pointer-events:none}
+.cta-bottom h2{font-size:clamp(26px,4vw,48px);font-weight:900;letter-spacing:-1.5px;
+  color:#fff;margin-bottom:14px;position:relative;z-index:1}
+.cta-bottom>p{font-size:18px;color:rgba(255,255,255,.8);margin-bottom:36px;position:relative;z-index:1}
+.cta-btn-w{display:inline-flex;align-items:center;gap:9px;background:#fff;color:#4A44CC;
+  padding:15px 34px;border-radius:15px;font-size:16px;font-weight:800;
+  box-shadow:0 8px 32px rgba(0,0,0,.2);transition:transform .15s,box-shadow .15s;
+  margin-bottom:20px;position:relative;z-index:1}
+.cta-btn-w:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.25)}
+.cta-badge{display:block;margin-bottom:40px;position:relative;z-index:1}
+.cta-badge img{height:46px;margin:0 auto;filter:brightness(0) invert(1);opacity:.9}
+.waitlist-lbl{font-size:14px;color:rgba(255,255,255,.7);margin-bottom:14px;position:relative;z-index:1}
+.waitlist-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.wl-input{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);
+  border-radius:12px;padding:12px 18px;color:#fff;font-size:14px;width:272px;
+  outline:none;font-family:inherit}
+.wl-input::placeholder{color:rgba(255,255,255,.5)}
+.wl-input:focus{border-color:rgba(255,255,255,.65)}
+.wl-btn{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.38);
+  border-radius:12px;padding:12px 22px;color:#fff;font-size:14px;font-weight:700;
+  cursor:pointer;transition:background .2s;font-family:inherit}
+.wl-btn:hover{background:rgba(255,255,255,.27)}
+.wl-success{display:none;background:rgba(0,200,150,.2);border:1px solid rgba(0,200,150,.45);
+  border-radius:10px;padding:10px 20px;color:#fff;font-size:14px;
+  margin-top:12px;position:relative;z-index:1}
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:60px 0 0}
+.foot-inner{max-width:1200px;margin:0 auto;padding:0 40px;
+  display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:48px;margin-bottom:48px}
+.foot-logo{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.foot-logo img{height:28px;width:28px;object-fit:contain}
+.foot-brand-name{font-size:15px;font-weight:700}
+.foot-tagline{font-size:13px;color:var(--text-muted);line-height:1.6;margin-top:8px}
+.foot-col h4{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:14px}
+.foot-col ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.foot-col ul a{font-size:13px;color:var(--text-muted);transition:color .2s}
+.foot-col ul a:hover{color:var(--text)}
+.foot-email{font-size:13px;color:var(--purple-light);margin-bottom:8px}
+.foot-dev{font-size:12px;color:var(--text-dim);line-height:1.5}
+.foot-bar{border-top:1px solid var(--border);padding:18px 40px;
+  max-width:1200px;margin:0 auto;
+  display:flex;justify-content:space-between;align-items:center}
+.foot-copy{font-size:12px;color:var(--text-dim)}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media(max-width:1024px){
+  .hero-inner{grid-template-columns:1fr;gap:48px}
+  .phone-wrap{order:-1}
+  .sp-inner{grid-template-columns:1fr;gap:44px}
+  .sp-inner.rev .sp-text,.sp-inner.rev .sp-visual{order:unset}
+  .branchen-grid{grid-template-columns:repeat(2,1fr)}
+  .feat-grid{grid-template-columns:1fr 1fr}.fc.wide{grid-column:span 1}
+  .feat-row3{grid-column:1/-1}
+  .price-grid{grid-template-columns:1fr;max-width:400px;margin:0 auto}.plan.pro{transform:none}
+  .trust-grid{grid-template-columns:repeat(2,1fr)}
+  .foot-inner{grid-template-columns:1fr 1fr;gap:36px}
+  .stats-inner{grid-template-columns:repeat(2,1fr)}
+  .stat{border-right:none;border-bottom:1px solid var(--border);padding:16px 0}
+  .stat:nth-child(odd){border-right:1px solid var(--border)}
+  .stat:nth-last-child(-n+2){border-bottom:none}
+}
+@media(max-width:768px){
+  .wrap,.nav-inner,.hero-inner,.stats-inner,.sp-inner,.branchen .wrap,
+  .feat-sec .wrap,.pricing .wrap,.trust .wrap,.foot-inner,.foot-bar{padding-left:20px;padding-right:20px}
+  .nav-links{display:none}.hamburger{display:block}
+  .hero{padding:56px 0 40px}.hero h1{font-size:clamp(32px,10vw,44px)}
+  .phone-wrap{display:none}
+  .spotlight{padding:64px 0}.branchen{padding:64px 0}
+  .feat-sec{padding:64px 0}.pricing{padding:64px 0}.trust{padding:60px 0}
+  .cta-bottom{padding:64px 20px}
+  .branchen-grid{grid-template-columns:1fr}
+  .feat-grid{grid-template-columns:1fr}.fc.wide{grid-column:span 1}
+  .feat-row3{grid-template-columns:1fr}
+  .foot-inner{grid-template-columns:1fr;gap:28px}
+  .foot-bar{flex-direction:column;gap:6px;text-align:center}
+}
+@media(max-width:480px){
+  .hero-btns{flex-direction:column}
+  .btn-primary,.btn-ghost{width:100%;justify-content:center}
+  .trust-row{gap:10px}
+  .waitlist-form{flex-direction:column;align-items:center}
+  .wl-input{width:100%;max-width:320px}
+  .mobile-menu{padding:16px 20px 20px}
+}
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="logo">
-    <img src="klarer_gewinn_transparent.svg" alt="Klarer Gewinn">
-    <span>Klarer Gewinn</span>
+<!-- ══ NAV ══════════════════════════════════════════════════════════════ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-logo">
+      <img src="klarer_gewinn_transparent.svg" alt="Klarer Gewinn">
+      <span class="nav-logo-text">Klarer Gewinn</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#preise">Preise</a></li>
+      <li><a href="#branchen">Branchen</a></li>
+      <li><a href="https://klarergewinn.de/impressum">Impressum</a></li>
+      <li><a href="https://klarergewinn.de/datenschutz">Datenschutz</a></li>
+    </ul>
+    <div class="nav-right">
+      <a class="nav-appstore" href="https://apps.apple.com/app/klarer-gewinn" target="_blank">
+        <svg width="13" height="16" viewBox="0 0 14 17" fill="currentColor"><path d="M13.17 11.77c-.24.56-.52 1.07-.85 1.55-.45.64-.81 1.08-1.1 1.32-.44.41-.91.61-1.41.62-.36 0-.8-.1-1.31-.31-.51-.21-.98-.31-1.41-.31-.45 0-.93.1-1.44.31-.51.21-.93.32-1.25.33-.48.02-.97-.19-1.45-.64C3.61 14.35 3.23 13.9 2.77 13.24 2.28 12.55 1.88 11.75 1.57 10.84 1.2 9.75 1 8.81 1 7.89c0-1.05.23-1.96.68-2.72A4.01 4.01 0 013.14 3.72a3.84 3.84 0 011.94-.56c.38 0 .88.12 1.5.35.62.23 1.01.35 1.18.35.13 0 .57-.14 1.32-.41.71-.26 1.3-.36 1.79-.32 1.33.11 2.32.63 2.98 1.57-1.19.72-1.77 1.72-1.76 3.01.01 1 .38 1.84 1.09 2.5.32.31.69.55 1.09.72-.09.25-.18.5-.28.73ZM10.04.38c0 .79-.29 1.52-.86 2.2-.69.81-1.53 1.27-2.43 1.2a2.44 2.44 0 01-.02-.3c0-.75.33-1.56.91-2.22.29-.34.66-.62 1.11-.84.45-.22.88-.34 1.28-.36.01.13.01.26.01.38Z"/></svg>
+        App Store
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Menü">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
   </div>
-  <div class="nav-links">
-    <a href="#features">Features</a>
-    <a href="#pricing">Preise</a>
-    <a href="https://etsy-profit-pro-ai.vercel.app/api/impressum">Impressum</a>
-    <a href="https://etsy-profit-pro-ai.vercel.app/api/privacy">Datenschutz</a>
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#features" onclick="closeMobile()">Features</a></li>
+      <li><a href="#preise" onclick="closeMobile()">Preise</a></li>
+      <li><a href="#branchen" onclick="closeMobile()">Branchen</a></li>
+      <li><a href="https://klarergewinn.de/impressum">Impressum</a></li>
+      <li><a href="https://klarergewinn.de/datenschutz">Datenschutz</a></li>
+      <li><a href="https://apps.apple.com/app/klarer-gewinn" target="_blank">Im App Store laden →</a></li>
+    </ul>
   </div>
 </nav>
 
-<section class="hero">
-  <div class="badge">🚀 Jetzt im App Store</div>
-  <h1>Buchhaltung in<br><span>dem Moment</span>,<br>nicht am Ende des Monats.</h1>
-  <p>Einnahmen tracken, Belege scannen, EÜR exportieren — alles in einer App. Speziell für Kleinunternehmer in Deutschland.</p>
-  <div class="waitlist">
-    <input type="email" id="email" placeholder="deine@email.de" />
-    <button class="btn-primary" onclick="joinWaitlist()">Benachrichtigung erhalten</button>
+<!-- ══ HERO ══════════════════════════════════════════════════════════════ -->
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <div class="hero-left fi">
+      <div class="hero-badge">🇩🇪 Jetzt im App Store verfügbar</div>
+      <h1>Buchhaltung in<br><span class="ac">dem Moment</span> —<br>nicht am Ende<br>des Monats.</h1>
+      <p class="hero-sub">Die KI-Buchhaltungs-App für Selbstständige, Handwerker und Gastronomen in Deutschland. GoBD-konform. DATEV-ready. Steuerberater-freundlich.</p>
+      <div class="hero-btns">
+        <a class="btn-primary" href="https://apps.apple.com/app/klarer-gewinn" target="_blank">
+          <svg width="14" height="17" viewBox="0 0 14 17" fill="currentColor"><path d="M13.17 11.77c-.24.56-.52 1.07-.85 1.55-.45.64-.81 1.08-1.1 1.32-.44.41-.91.61-1.41.62-.36 0-.8-.1-1.31-.31-.51-.21-.98-.31-1.41-.31-.45 0-.93.1-1.44.31-.51.21-.93.32-1.25.33-.48.02-.97-.19-1.45-.64C3.61 14.35 3.23 13.9 2.77 13.24 2.28 12.55 1.88 11.75 1.57 10.84 1.2 9.75 1 8.81 1 7.89c0-1.05.23-1.96.68-2.72A4.01 4.01 0 013.14 3.72a3.84 3.84 0 011.94-.56c.38 0 .88.12 1.5.35.62.23 1.01.35 1.18.35.13 0 .57-.14 1.32-.41.71-.26 1.3-.36 1.79-.32 1.33.11 2.32.63 2.98 1.57-1.19.72-1.77 1.72-1.76 3.01.01 1 .38 1.84 1.09 2.5.32.31.69.55 1.09.72-.09.25-.18.5-.28.73ZM10.04.38c0 .79-.29 1.52-.86 2.2-.69.81-1.53 1.27-2.43 1.2a2.44 2.44 0 01-.02-.3c0-.75.33-1.56.91-2.22.29-.34.66-.62 1.11-.84.45-.22.88-.34 1.28-.36.01.13.01.26.01.38Z"/></svg>
+          Im App Store laden
+        </a>
+        <a class="btn-ghost" href="#features">Demo ansehen</a>
+      </div>
+      <div class="trust-row">
+        <span class="trust-item"><span class="ck">✓</span> GoBD-konform</span>
+        <span class="trust-item"><span class="ck">✓</span> §19 UStG</span>
+        <span class="trust-item"><span class="ck">✓</span> DATEV Export</span>
+        <span class="trust-item"><span class="ck">✓</span> Made in Germany</span>
+      </div>
+    </div>
+
+    <!-- Phone mockup -->
+    <div class="phone-wrap fi d2">
+      <div class="phone-glow"></div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="pscr">
+          <div class="ph-hdr">
+            <span class="ph-greet">Guten Morgen 🌿</span>
+            <span style="font-size:16px">🔔</span>
+          </div>
+          <div class="ph-card">
+            <div class="ph-card-lbl">Gewinn diesen Monat</div>
+            <div class="ph-amount">+€1.223,58</div>
+            <div class="ph-track"><div class="ph-fill"></div></div>
+            <div class="ph-prog">68% zum Monatsziel erreicht</div>
+          </div>
+          <div class="ph-stats">
+            <div class="ph-stat">
+              <div class="ph-stat-v inc">€3.450</div>
+              <div class="ph-stat-l">Einnahmen</div>
+            </div>
+            <div class="ph-stat">
+              <div class="ph-stat-v exp">€2.226</div>
+              <div class="ph-stat-l">Ausgaben</div>
+            </div>
+          </div>
+          <svg viewBox="0 0 230 52" class="ph-chart" style="width:100%;height:48px;margin-bottom:10px" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2"  y="28" width="30" height="24" rx="4" fill="#1A1D26"/>
+            <rect x="40" y="18" width="30" height="34" rx="4" fill="#1A1D26"/>
+            <rect x="78" y="22" width="30" height="30" rx="4" fill="#1A1D26"/>
+            <rect x="116" y="14" width="30" height="38" rx="4" fill="#1A1D26"/>
+            <rect x="154" y="10" width="30" height="42" rx="4" fill="#1A1D26"/>
+            <rect x="192" y="4"  width="30" height="48" rx="4" fill="url(#pg)"/>
+            <defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6C63FF"/><stop offset="100%" stop-color="#00C896"/></linearGradient></defs>
+          </svg>
+          <div class="ph-actions">
+            <div class="ph-act p">+ Einnahme</div>
+            <div class="ph-act">+ Ausgabe</div>
+            <div class="ph-act">📸 Scan</div>
+            <div class="ph-act">🤖 KI</div>
+          </div>
+        </div>
+      </div>
+      <div class="ph-badge ai">🤖 KI-Berater</div>
+      <div class="ph-badge gobd">GoBD ✓</div>
+    </div>
   </div>
-  <div class="success" id="success">✓ Du bist auf der Liste! Wir melden uns bald.</div>
-  <a class="appstore-btn" href="https://apps.apple.com/app/klarer-gewinn" target="_blank">
-    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Im App Store laden">
-  </a>
 </section>
 
-<div class="features" id="features">
-  <div class="feature">
-    <div class="feature-icon">📊</div>
-    <h3>Einnahmen & Ausgaben</h3>
-    <p>Erfasse alle Transaktionen in Sekunden. Kategorien nach Anlage EÜR voreingestellt.</p>
-  </div>
-  <div class="feature">
-    <div class="feature-icon">📸</div>
-    <h3>KI-Belegscan</h3>
-    <p>Foto machen — fertig. Die KI erkennt Betrag, Kategorie und Datum automatisch. GoBD-konform archiviert.</p>
-  </div>
-  <div class="feature">
-    <div class="feature-icon">🤖</div>
-    <h3>KI-Steuerberater</h3>
-    <p>Dein persönlicher KI-Assistent für Steuerfragen — kennt deine echten Zahlen und antwortet auf Deutsch.</p>
-  </div>
-  <div class="feature">
-    <div class="feature-icon">📄</div>
-    <h3>EÜR Export</h3>
-    <p>Professionelle Einnahmenüberschussrechnung mit §19 UStG Hinweis. Bereit für den Steuerberater.</p>
-  </div>
-  <div class="feature">
-    <div class="feature-icon">⚠️</div>
-    <h3>Kleinunternehmer-Warnung</h3>
-    <p>Automatische Warnung wenn du dich der €25.000 Grenze näherst. Nie wieder eine böse Überraschung.</p>
-  </div>
-  <div class="feature">
-    <div class="feature-icon">📋</div>
-    <h3>Rechnungen & Angebote</h3>
-    <p>Professionelle PDF-Rechnungen erstellen und teilen. Mit §19 UStG Hinweis und deinem Logo.</p>
-  </div>
-  <div class="feature">
-    <div class="feature-icon">🚗</div>
-    <h3>Fahrtenbuch</h3>
-    <p>Geschäftsfahrten erfassen, €0,30/km automatisch berechnet und als Fahrtkosten gebucht.</p>
-  </div>
-  <div class="feature dimmed">
-    <div class="feature-icon">🛍️</div>
-    <h3>Etsy Integration <span class="coming-soon-badge">Demnächst</span></h3>
-    <p>Etsy-Bestellungen automatisch importieren. Kein manuelles Eingeben mehr.</p>
-  </div>
-  <div class="feature dimmed">
-    <div class="feature-icon">📦</div>
-    <h3>Amazon Integration <span class="coming-soon-badge">Demnächst</span></h3>
-    <p>Amazon-Einnahmen automatisch importieren und kategorisieren.</p>
-  </div>
-  <div class="feature dimmed">
-    <div class="feature-icon">🏦</div>
-    <h3>DATEV Export <span class="coming-soon-badge">Demnächst</span></h3>
-    <p>Direktexport für deinen Steuerberater im DATEV-Format. Business-Feature.</p>
+<!-- ══ STATS BAR ══════════════════════════════════════════════════════════ -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat fi">
+      <div class="stat-n">6</div>
+      <div class="stat-d">Branchen — Handwerk bis Gastronomie</div>
+    </div>
+    <div class="stat fi d1">
+      <div class="stat-n">€25.000</div>
+      <div class="stat-d">Kleinunternehmer-Schutz</div>
+    </div>
+    <div class="stat fi d2">
+      <div class="stat-n">GoBD</div>
+      <div class="stat-d">Konform archiviert</div>
+    </div>
+    <div class="stat fi d3">
+      <div class="stat-n">DATEV</div>
+      <div class="stat-d">Steuerberater-ready</div>
+    </div>
   </div>
 </div>
 
-<section class="pricing" id="pricing">
-  <h2>Einfache Preise</h2>
-  <p>Keine versteckten Kosten. Kündigung jederzeit möglich.</p>
-  <div class="plans">
-    <div class="plan">
-      <h3>Free</h3>
-      <div class="price">€0 <span>/Monat</span></div>
-      <div class="sub">Zum Ausprobieren</div>
-      <ul>
-        <li>10 Transaktionen pro Monat</li>
-        <li>Dashboard & Übersicht</li>
-        <li class="no">KI-Belegscan</li>
-        <li class="no">KI-Steuerberater</li>
-        <li class="no">EÜR Export</li>
-        <li class="no">Rechnungen</li>
+<!-- ══ SPOTLIGHT 1 — KI-Belegscan ════════════════════════════════════════ -->
+<section class="spotlight" id="features">
+  <div class="sp-inner">
+    <div class="sp-text fi">
+      <div class="lbl">KI-Belegscan</div>
+      <h2>Foto machen.<br>Fertig.</h2>
+      <p class="body">Die KI erkennt Betrag, Händler, Kategorie und Datum automatisch. GoBD-konform archiviert — unveränderbar, 10 Jahre aufbewahrt. Kein manuelles Eingeben mehr.</p>
+      <ul class="sp-list">
+        <li><span class="ck">✓</span> Automatische Kategorisierung nach SKR03</li>
+        <li><span class="ck">✓</span> GoBD-konforme Archivierung</li>
+        <li><span class="ck">✓</span> Beleg unveränderbar gespeichert</li>
+        <li><span class="ck">✓</span> Steuerberater kann direkt zugreifen</li>
       </ul>
-      <a href="https://apps.apple.com/app/klarer-gewinn" target="_blank" style="display:block">
-        <button class="btn-primary" style="width:100%;background:#2D3548">Im App Store laden</button>
-      </a>
     </div>
-    <div class="plan featured">
-      <div class="plan-badge">Beliebteste Wahl</div>
-      <h3>Pro</h3>
-      <div class="price">€9,99 <span>/Monat</span></div>
-      <div class="sub">Für Freelancer & Etsy-Verkäufer</div>
-      <ul>
-        <li>Unbegrenzte Transaktionen</li>
-        <li>KI-Belegscan (GoBD)</li>
-        <li>KI-Steuerberater</li>
-        <li>EÜR Export & E-Mail</li>
-        <li>Fahrtenbuch</li>
-        <li class="no">Mehrere Unternehmen</li>
-        <li class="no">Rechnungsgenerator</li>
-      </ul>
-      <a href="https://apps.apple.com/app/klarer-gewinn" target="_blank" style="display:block">
-        <button class="btn-primary" style="width:100%">Im App Store laden</button>
-      </a>
-    </div>
-    <div class="plan business">
-      <div class="plan-badge gold">Business</div>
-      <h3>Business</h3>
-      <div class="price">€27,99 <span>/Monat</span></div>
-      <div class="sub">Für mehrere Betriebe & Handwerk</div>
-      <ul>
-        <li>Alles aus Pro</li>
-        <li>Mehrere Unternehmen</li>
-        <li>Rechnungen & Angebote (PDF)</li>
-        <li>LV & VOB/B Verträge</li>
-        <li>Zusatzleistungen</li>
-        <li class="soon">DATEV Export (demnächst)</li>
-      </ul>
-      <a href="https://apps.apple.com/app/klarer-gewinn" target="_blank" style="display:block">
-        <button class="btn-primary" style="width:100%;background:#FFB800;color:#000">Im App Store laden</button>
-      </a>
+    <div class="sp-visual fi d2">
+      <div class="scan-visual">
+        <div class="scan-hdr">
+          <span>← Zurück</span>
+          <span class="scan-t">Beleg scannen</span>
+          <span></span>
+        </div>
+        <div class="scan-vp">
+          <div class="scan-frame">
+            <div class="scan-corner sc-tl"></div>
+            <div class="scan-corner sc-tr"></div>
+            <div class="scan-corner sc-bl"></div>
+            <div class="scan-corner sc-br"></div>
+            <div class="scan-anim"></div>
+            <div class="scan-store">REWE Markt GmbH · Wiesbaden · 08.06.2026</div>
+            <div class="scan-lines">
+              <div class="sl f"></div>
+              <div class="sl m"></div>
+              <div class="sl s"></div>
+              <div class="sl f"></div>
+              <div class="sl m"></div>
+              <div class="sl amt" style="display:flex;align-items:center">
+                <span style="font-size:13px;color:var(--green);font-weight:700;padding-left:10px">€ 23,47</span>
+              </div>
+            </div>
+          </div>
+          <div class="scan-result">
+            <div class="s-check">✓</div>
+            <div>
+              <div class="s-r1">Lebensmittel erkannt · €23,47</div>
+              <div class="s-r2">GoBD-konform archiviert · unveränderbar gespeichert</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<footer class="footer">
-  <div class="footer-links">
-    <a href="https://etsy-profit-pro-ai.vercel.app/api/impressum">Impressum</a>
-    <a href="https://etsy-profit-pro-ai.vercel.app/api/privacy">Datenschutz</a>
+<!-- ══ SPOTLIGHT 2 — KI-Steuerberater ═══════════════════════════════════ -->
+<section class="spotlight">
+  <div class="sp-inner rev">
+    <div class="sp-text fi d1">
+      <div class="lbl">KI-Steuerberater</div>
+      <h2>Dein persönlicher<br>Steuerberater.<br>In der App.</h2>
+      <p class="body">Kennt deine echten Zahlen. Kennt deine Branche. Beantwortet Fragen zu Fahrtkosten, VOB/B, Wareneinsatz, §19 UStG — auf Deutsch, sofort, kostenlos.</p>
+      <ul class="sp-list">
+        <li><span class="ck">✓</span> Kennt deine echten Einnahmen und Ausgaben</li>
+        <li><span class="ck">✓</span> Branchenspezifisch: GaLaBau, Gastro, IT, E-Commerce</li>
+        <li><span class="ck">✓</span> Aktuelle Steuergesetze 2026</li>
+        <li><span class="ck">✓</span> Spart bis zu €600/Jahr beim Steuerberater</li>
+      </ul>
+    </div>
+    <div class="sp-visual fi">
+      <div class="chat-visual">
+        <div class="chat-hdr">
+          <div class="chat-ava">🤖</div>
+          <div>
+            <div class="chat-name">KI-Berater</div>
+            <div class="chat-status">● Online · Kennt deine Zahlen</div>
+          </div>
+        </div>
+        <div class="chat-msgs">
+          <div class="cb u">Was kann ich für mein Homeoffice absetzen?</div>
+          <div class="cb a"><strong>€6/Tag Pauschale</strong>, max. <strong>€1.260/Jahr</strong> (210 Tage). Kein Einzelnachweis nötig — gilt automatisch für dein IT-Freelancer-Profil.</div>
+          <div class="cb u">Mein MacBook hat €1.400 gekostet?</div>
+          <div class="cb a">Über €800 netto → <strong>3 Jahre linear</strong> abschreiben. €1.400 ÷ 3 = <strong>~€467/Jahr</strong> absetzbar. Im Anschaffungsjahr anteilig.</div>
+        </div>
+      </div>
+    </div>
   </div>
-  <p>© 2026 Nathan Zinzan Goundar — Klarer Gewinn. Alle Rechte vorbehalten.</p>
+</section>
+
+<!-- ══ BRANCHEN ═══════════════════════════════════════════════════════════ -->
+<section class="branchen" id="branchen">
+  <div class="wrap">
+    <div class="branchen-hdr fi">
+      <h2>Für jede Branche gemacht</h2>
+      <p>Klarer Gewinn passt sich deiner Branche an — automatisch die richtigen Kategorien, Pflichten und KI-Beratung.</p>
+    </div>
+    <div class="branchen-grid">
+      <div class="b-card fi">
+        <span class="b-emoji">🌿</span>
+        <div class="b-name">Handwerk / GaLaBau</div>
+        <div class="b-desc">VOB/B Angebote, DIN 18320 Positionen, Fremdleistungen nach §13b UStG korrekt buchen.</div>
+      </div>
+      <div class="b-card fi d1">
+        <span class="b-emoji">🍽️</span>
+        <div class="b-name">Gastronomie</div>
+        <div class="b-desc">7%/19% USt. automatisch getrennt, Tagesabschluss, TSE-Pflicht und Wareneinsatz im Blick.</div>
+      </div>
+      <div class="b-card fi d2">
+        <span class="b-emoji">💻</span>
+        <div class="b-name">IT / Freelancer</div>
+        <div class="b-desc">Stundensatz-Rechner, Homeoffice-Pauschale, Scheinselbstständigkeit sicher vermeiden.</div>
+      </div>
+      <div class="b-card fi d1">
+        <span class="b-emoji">📦</span>
+        <div class="b-name">E-Commerce / Etsy</div>
+        <div class="b-desc">DAC7-konform, Etsy-Gebühren korrekt erfasst, Retouren richtig als Einnahmenminderung buchen.</div>
+      </div>
+      <div class="b-card fi d2">
+        <span class="b-emoji">🛍️</span>
+        <div class="b-name">Einzelhandel</div>
+        <div class="b-desc">Wareneinsatzquote überwachen, Kassenbuch GoBD-konform, TSE-Kassensystem integriert.</div>
+      </div>
+      <div class="b-card fi d3">
+        <span class="b-emoji">🧾</span>
+        <div class="b-name">Kleinunternehmer</div>
+        <div class="b-desc">§19 UStG vollständig abgedeckt, EÜR automatisch, GoBD-Archivierung ohne Aufwand.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FEATURES GRID ══════════════════════════════════════════════════════ -->
+<section class="feat-sec">
+  <div class="wrap">
+    <div class="feat-hdr fi">
+      <h2>Alles was du brauchst</h2>
+      <p>Von der Belegerfassung bis zum DATEV-Export — in einer App.</p>
+    </div>
+    <div class="feat-grid">
+      <!-- Row 1 -->
+      <div class="fc wide fi">
+        <div class="fc-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+        </div>
+        <div class="fc-name">EÜR Export</div>
+        <div class="fc-desc">Professioneller PDF-Bericht gemäß §4 Abs. 3 EStG. Per E-Mail an deinen Steuerberater. Bereit für das Finanzamt — mit vollständiger Belegliste und Kategorisierung nach SKR03.</div>
+      </div>
+      <div class="fc fi d1">
+        <div class="fc-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+        </div>
+        <div class="fc-name">DATEV Export</div>
+        <div class="fc-desc">EXTF Buchungsstapel v9 mit CP1252-Kodierung. Dein Steuerberater importiert es direkt in DATEV Unternehmen online.</div>
+      </div>
+      <!-- Row 2 -->
+      <div class="fc fi">
+        <div class="fc-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 01-2-2V9l3-6h14l3 6v6a2 2 0 01-2 2h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="17.5" r="2.5"/></svg>
+        </div>
+        <div class="fc-name">Fahrtenbuch</div>
+        <div class="fc-desc">€0,30/km Pauschale — jede Fahrt erfasst, automatisch als Betriebsausgabe gebucht und im EÜR ausgewiesen.</div>
+      </div>
+      <div class="fc fi d1">
+        <div class="fc-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="7" y1="16" x2="13" y2="16"/></svg>
+        </div>
+        <div class="fc-name">Rechnungen &amp; Angebote</div>
+        <div class="fc-desc">PDF mit Logo, §19 UStG Hinweis und fortlaufender Nummer. VOB/B-konforme Angebote für Handwerker.</div>
+      </div>
+      <div class="fc fi d2">
+        <div class="fc-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        </div>
+        <div class="fc-name">Kleinunternehmer-Warnung</div>
+        <div class="fc-desc">Automatischer Alarm bei 80% (€20.000) und 92% (€23.000) der €25.000-Grenze — nie wieder überraschend umsatzsteuerpflichtig.</div>
+      </div>
+      <!-- Row 3 -->
+      <div class="feat-row3">
+        <div class="fc fi">
+          <div class="fc-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          </div>
+          <div class="fc-name">Mehrsprachig</div>
+          <div class="fc-desc">Deutsch und Englisch. Die App wechselt die Sprache — deine Buchhaltungsdaten bleiben GoBD-konform auf Deutsch.</div>
+        </div>
+        <div class="fc fi d1">
+          <div class="fc-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <div class="fc-name">Abonnement verwalten</div>
+          <div class="fc-desc">Jederzeit kündbar via Stripe oder Apple App Store. Kein Vertrag, keine Mindestlaufzeit, keine versteckten Gebühren.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRICING ════════════════════════════════════════════════════════════ -->
+<section class="pricing" id="preise">
+  <div class="wrap">
+    <div class="price-hdr fi">
+      <h2>Einfache Preise</h2>
+      <p>Kostenlos starten. Upgraden wenn du bereit bist.</p>
+      <div class="price-toggle">
+        <button class="tog on" id="togM" onclick="setToggle('monthly')">Monatlich</button>
+        <button class="tog" id="togA" onclick="setToggle('annual')">Jährlich <span class="save">-20%</span></button>
+      </div>
+    </div>
+    <div class="price-grid">
+      <!-- Free -->
+      <div class="plan fi">
+        <div class="plan-tier">Free</div>
+        <div class="plan-price-row">
+          <span class="amt">€0</span><span class="per">/Monat</span>
+        </div>
+        <div class="plan-billing">&nbsp;</div>
+        <div class="plan-desc">Zum Ausprobieren — ohne Zeitlimit.</div>
+        <ul class="plan-feats">
+          <li><span class="t">✓</span>10 Transaktionen pro Monat</li>
+          <li><span class="t">✓</span>Dashboard &amp; Echtzeit-Gewinn</li>
+          <li><span class="t">✓</span>Einnahmen &amp; Ausgaben</li>
+          <li class="off"><span class="x">–</span>KI-Belegscan</li>
+          <li class="off"><span class="x">–</span>KI-Steuerberater</li>
+          <li class="off"><span class="x">–</span>EÜR Export</li>
+        </ul>
+        <a class="plan-btn pg" href="https://apps.apple.com/app/klarer-gewinn" target="_blank">Kostenlos starten</a>
+      </div>
+      <!-- Pro -->
+      <div class="plan pro fi d1">
+        <div class="plan-top-badge pop">Beliebteste Wahl</div>
+        <div class="plan-tier">Pro</div>
+        <div class="plan-price-row">
+          <span class="amt" id="proAmt">€9,99</span><span class="per">/Monat</span>
+        </div>
+        <div class="plan-billing" id="proBill">&nbsp;</div>
+        <div class="plan-desc">Alles für einen Solo-Freelancer — unbegrenzt und GoBD-konform.</div>
+        <ul class="plan-feats">
+          <li><span class="t">✓</span>Unbegrenzte Transaktionen</li>
+          <li><span class="t">✓</span>KI-Belegscan (GoBD-konform)</li>
+          <li><span class="t">✓</span>KI-Steuerberater</li>
+          <li><span class="t">✓</span>EÜR Export &amp; E-Mail</li>
+          <li><span class="t">✓</span>Fahrtenbuch</li>
+          <li><span class="t">✓</span>Etsy-Integration</li>
+          <li class="off"><span class="x">–</span>Mehrere Unternehmen</li>
+          <li class="off"><span class="x">–</span>Rechnungsgenerator</li>
+        </ul>
+        <a class="plan-btn pp" href="https://apps.apple.com/app/klarer-gewinn" target="_blank">Pro starten</a>
+      </div>
+      <!-- Business -->
+      <div class="plan biz fi d2">
+        <div class="plan-top-badge gld">Business</div>
+        <div class="plan-tier">Business</div>
+        <div class="plan-price-row">
+          <span class="amt" id="bizAmt">€27,99</span><span class="per">/Monat</span>
+        </div>
+        <div class="plan-billing" id="bizBill">&nbsp;</div>
+        <div class="plan-desc">Für Handwerker und Unternehmer mit mehreren Betrieben.</div>
+        <ul class="plan-feats">
+          <li><span class="t">✓</span>Alles aus Pro</li>
+          <li><span class="t">✓</span>Mehrere Unternehmen / Betriebe</li>
+          <li><span class="t">✓</span>Rechnungen &amp; Angebote (PDF)</li>
+          <li><span class="t">✓</span>VOB/B &amp; LV-Positionen</li>
+          <li><span class="t">✓</span>DATEV EXTF Export</li>
+          <li><span class="t">✓</span>Firmenprofil mit Logo</li>
+        </ul>
+        <a class="plan-btn pb" href="https://apps.apple.com/app/klarer-gewinn" target="_blank">Business starten</a>
+      </div>
+    </div>
+    <p class="price-note fi">Alle Pläne: Keine Einrichtungsgebühr. Kündigung jederzeit. Apple Pay &amp; Kreditkarte.</p>
+  </div>
+</section>
+
+<!-- ══ TRUST ══════════════════════════════════════════════════════════════ -->
+<section class="trust">
+  <div class="wrap">
+    <div class="trust-hdr fi">
+      <h2>Rechtlich korrekt. Technisch solide.</h2>
+      <p>Entwickelt für deutsche Steuer- und Buchführungspflichten.</p>
+    </div>
+    <div class="trust-grid">
+      <div class="tb fi">
+        <div class="tb-icon">🔒</div>
+        <div class="tb-title">GoBD-konform</div>
+        <div class="tb-desc">Unveränderbare Belegarchivierung gemäß Grundsätze ordnungsmäßiger Buchführung</div>
+      </div>
+      <div class="tb fi d1">
+        <div class="tb-icon">📊</div>
+        <div class="tb-title">§4 Abs. 3 EStG</div>
+        <div class="tb-desc">Korrekte Einnahmenüberschussrechnung nach deutschem Steuerrecht</div>
+      </div>
+      <div class="tb fi d2">
+        <div class="tb-icon">🏦</div>
+        <div class="tb-title">DATEV-ready</div>
+        <div class="tb-desc">EXTF Buchungsstapel Export — direkt importierbar in DATEV Kanzlei-Rechnungswesen</div>
+      </div>
+      <div class="tb fi d3">
+        <div class="tb-icon">🇩🇪</div>
+        <div class="tb-title">Made in Germany</div>
+        <div class="tb-desc">Entwickelt für deutsche Steuergesetze — Mindestlohn, §19 UStG, GoBD, SKR03</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA BOTTOM ═════════════════════════════════════════════════════════ -->
+<section class="cta-bottom">
+  <h2>Bereit für klare Zahlen?</h2>
+  <p>Kostenlos starten. Keine Kreditkarte nötig.</p>
+  <a class="cta-btn-w" href="https://apps.apple.com/app/klarer-gewinn" target="_blank">
+    <svg width="16" height="19" viewBox="0 0 14 17" fill="currentColor"><path d="M13.17 11.77c-.24.56-.52 1.07-.85 1.55-.45.64-.81 1.08-1.1 1.32-.44.41-.91.61-1.41.62-.36 0-.8-.1-1.31-.31-.51-.21-.98-.31-1.41-.31-.45 0-.93.1-1.44.31-.51.21-.93.32-1.25.33-.48.02-.97-.19-1.45-.64C3.61 14.35 3.23 13.9 2.77 13.24 2.28 12.55 1.88 11.75 1.57 10.84 1.2 9.75 1 8.81 1 7.89c0-1.05.23-1.96.68-2.72A4.01 4.01 0 013.14 3.72a3.84 3.84 0 011.94-.56c.38 0 .88.12 1.5.35.62.23 1.01.35 1.18.35.13 0 .57-.14 1.32-.41.71-.26 1.3-.36 1.79-.32 1.33.11 2.32.63 2.98 1.57-1.19.72-1.77 1.72-1.76 3.01.01 1 .38 1.84 1.09 2.5.32.31.69.55 1.09.72-.09.25-.18.5-.28.73ZM10.04.38c0 .79-.29 1.52-.86 2.2-.69.81-1.53 1.27-2.43 1.2a2.44 2.44 0 01-.02-.3c0-.75.33-1.56.91-2.22.29-.34.66-.62 1.11-.84.45-.22.88-.34 1.28-.36.01.13.01.26.01.38Z"/></svg>
+    Im App Store laden
+  </a>
+  <a class="cta-badge" href="https://apps.apple.com/app/klarer-gewinn" target="_blank">
+    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store">
+  </a>
+  <p class="waitlist-lbl">Oder auf dem Laufenden bleiben:</p>
+  <div class="waitlist-form">
+    <input class="wl-input" type="email" id="wlEmail" placeholder="deine@email.de">
+    <button class="wl-btn" onclick="joinWaitlist()">Benachrichtigung erhalten</button>
+  </div>
+  <div class="wl-success" id="wlSuccess">✓ Du bist auf der Liste! Wir melden uns bald.</div>
+</section>
+
+<!-- ══ FOOTER ═════════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="foot-inner">
+    <div>
+      <div class="foot-logo">
+        <img src="klarer_gewinn_transparent.svg" alt="Klarer Gewinn">
+        <span class="foot-brand-name">Klarer Gewinn</span>
+      </div>
+      <div class="foot-tagline">Buchhaltung in dem Moment.<br>Nicht am Ende des Monats.</div>
+    </div>
+    <div class="foot-col">
+      <h4>Produkt</h4>
+      <ul>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#preise">Preise</a></li>
+        <li><a href="#branchen">Branchen</a></li>
+        <li><a href="https://apps.apple.com/app/klarer-gewinn" target="_blank">App Store</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>Rechtliches</h4>
+      <ul>
+        <li><a href="https://klarergewinn.de/impressum">Impressum</a></li>
+        <li><a href="https://klarergewinn.de/datenschutz">Datenschutz</a></li>
+        <li><a href="https://klarergewinn.de/agb">AGB</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>Kontakt</h4>
+      <div class="foot-email">hello@klarergewinn.de</div>
+      <div class="foot-dev">Entwickelt von<br>Nathan Zinzan Goundar<br>Wiesbaden, Deutschland</div>
+    </div>
+  </div>
+  <div class="foot-bar">
+    <span class="foot-copy">© 2026 Klarer Gewinn · Alle Rechte vorbehalten</span>
+    <span class="foot-copy">Klarer Gewinn ist kein registrierter Steuerberater. Bei komplexen Fragen Steuerberater hinzuziehen.</span>
+  </div>
 </footer>
 
 <script>
-const SUPABASE_URL = 'https://dajqkdztttavidnpijda.supabase.co';
-const SUPABASE_ANON = 'sb_publishable_q1zA5Js3wqgCaZ1IoN2nww_eeFdBVNT';
-async function joinWaitlist() {
-  const email = document.getElementById('email').value.trim();
-  if (!email || !email.includes('@')) {
-    document.getElementById('email').focus();
-    return;
-  }
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_ANON,
-        'Authorization': `Bearer ${SUPABASE_ANON}`,
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({ email: email.toLowerCase() })
+/* ── Supabase waitlist ── */
+const SUPABASE_URL='https://dajqkdztttavidnpijda.supabase.co';
+const SUPABASE_ANON='sb_publishable_q1zA5Js3wqgCaZ1IoN2nww_eeFdBVNT';
+async function joinWaitlist(){
+  const email=document.getElementById('wlEmail').value.trim();
+  if(!email||!email.includes('@')){document.getElementById('wlEmail').focus();return;}
+  try{
+    const r=await fetch(SUPABASE_URL+'/rest/v1/waitlist',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON,
+        'Authorization':'Bearer '+SUPABASE_ANON,'Prefer':'return=minimal'},
+      body:JSON.stringify({email:email.toLowerCase()})
     });
-    if (res.ok || res.status === 201) {
-      document.getElementById('success').style.display = 'block';
-      document.getElementById('email').value = '';
+    if(r.ok||r.status===201||r.status===409){
+      document.getElementById('wlSuccess').style.display='block';
+      document.getElementById('wlEmail').value='';
     }
-  } catch(e) { console.error(e); }
+  }catch(e){console.error(e);}
 }
-</script>
 
+/* ── Mobile menu ── */
+function closeMobile(){document.getElementById('mobileMenu').classList.remove('open');}
+document.getElementById('hamburger').addEventListener('click',function(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+});
+
+/* ── Nav scroll ── */
+window.addEventListener('scroll',function(){
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40);
+},{passive:true});
+
+/* ── Pricing toggle ── */
+var pricingMode='monthly';
+function setToggle(mode){
+  pricingMode=mode;
+  document.getElementById('togM').classList.toggle('on',mode==='monthly');
+  document.getElementById('togA').classList.toggle('on',mode==='annual');
+  if(mode==='annual'){
+    document.getElementById('proAmt').textContent='€7,99';
+    document.getElementById('proBill').textContent='× 12 = €95,88 / Jahr';
+    document.getElementById('bizAmt').textContent='€22,39';
+    document.getElementById('bizBill').textContent='× 12 = €268,68 / Jahr';
+  } else {
+    document.getElementById('proAmt').textContent='€9,99';
+    document.getElementById('proBill').innerHTML='&nbsp;';
+    document.getElementById('bizAmt').textContent='€27,99';
+    document.getElementById('bizBill').innerHTML='&nbsp;';
+  }
+}
+
+/* ── Intersection Observer fade-in ── */
+var io=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('vis');});
+},{threshold:.12});
+document.querySelectorAll('.fi').forEach(function(el){io.observe(el);});
+
+/* ── Enter key for waitlist ── */
+document.getElementById('wlEmail').addEventListener('keydown',function(e){
+  if(e.key==='Enter')joinWaitlist();
+});
+</script>
 </body>
 </html>
