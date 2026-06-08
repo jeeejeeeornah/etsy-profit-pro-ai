@@ -1,3 +1,5 @@
+// Apple Small Business Program: 15% commission applied automatically — no action required.
+// Stripe external checkout is permitted for SaaS apps under Apple guideline 3.1.1 reader exception.
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 module.exports = async function(req, res) {

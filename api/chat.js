@@ -18,7 +18,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 1000,
-        system: system || 'Du bist ein hilfreicher KI-Steuerberater für deutsche Kleinunternehmer.',
+        system: system || 'Du bist ein hilfreicher KI-Assistent für deutsche Kleinunternehmer.',
         messages: filtered
       })
     });

@@ -8,5 +8,11 @@
         { "key": "Access-Control-Allow-Headers", "value": "Content-Type" }
       ]
     }
+  ],
+  "rewrites": [
+    { "source": "/impressum", "destination": "/api/impressum" },
+    { "source": "/datenschutz", "destination": "/api/privacy" },
+    { "source": "/agb", "destination": "/api/agb" },
+    { "source": "/chat", "destination": "/api/chat-ui" }
   ]
 }

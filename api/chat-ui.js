@@ -5,7 +5,7 @@ module.exports = async function(req, res) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KI Steuerberater</title>
+<title>KI-Assistent</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: #0D1117; color: #fff; font-family: Inter, sans-serif; height: 100vh; display: flex; flex-direction: column; }
@@ -21,7 +21,7 @@ body { background: #0D1117; color: #fff; font-family: Inter, sans-serif; height:
 </head>
 <body>
 <div id="messages">
-  <div class="msg assistant">Hallo! Ich bin dein KI-Steuerberater. Wie kann ich dir helfen?</div>
+  <div class="msg assistant">Hallo! Ich bin dein KI-Assistent. Wie kann ich dir helfen?</div>
 </div>
 <div id="input-area">
   <input id="input" type="text" placeholder="Frage stellen..." />
@@ -31,7 +31,7 @@ body { background: #0D1117; color: #fff; font-family: Inter, sans-serif; height:
 const params = new URLSearchParams(window.location.search);
 const userId = params.get('userId') || '';
 const messages = [];
-let systemPrompt = 'Du bist ein hilfreicher KI-Steuerberater für deutsche Kleinunternehmer und Etsy-Verkäufer. Antworte auf Deutsch, kurz und klar.';
+let systemPrompt = 'Du bist ein hilfreicher KI-Assistent für deutsche Kleinunternehmer und Etsy-Verkäufer. Antworte auf Deutsch, kurz und klar.';
 
 async function loadUserData() {
   if (!userId) return;
@@ -40,7 +40,7 @@ async function loadUserData() {
     const data = await res.json();
     if (data && data.length > 0) {
       const d = data[0];
-      systemPrompt = 'Du bist ein hilfreicher KI-Steuerberater. Finanzdaten: Einnahmen: €' + (d.total_income||0).toFixed(2) + ', Ausgaben: €' + (d.total_expenses||0).toFixed(2) + ', Gewinn: €' + (d.profit||0).toFixed(2) + '. Antworte auf Deutsch.';
+      systemPrompt = 'Du bist ein hilfreicher KI-Assistent. Finanzdaten: Einnahmen: €' + (d.total_income||0).toFixed(2) + ', Ausgaben: €' + (d.total_expenses||0).toFixed(2) + ', Gewinn: €' + (d.profit||0).toFixed(2) + '. Antworte auf Deutsch.';
     }
   } catch(e) {}
 }

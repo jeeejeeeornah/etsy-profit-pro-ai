@@ -26,7 +26,8 @@ module.exports = async function(req, res) {
   Rheinstraße 84<br>
   65185 Wiesbaden<br>
   Deutschland<br>
-  E-Mail: <a href="mailto:nath132@yahoo.com">nath132@yahoo.com</a>
+  Telefon: +49 178 2074363<br>
+  E-Mail: <a href="mailto:hello@klarergewinn.de">hello@klarergewinn.de</a>
 </p>
 
 <h2>2. Erhebung und Verarbeitung personenbezogener Daten</h2>
@@ -50,7 +51,11 @@ module.exports = async function(req, res) {
 </ul>
 
 <h2>5. Datenspeicherung und Sicherheit</h2>
-<p>Ihre Daten werden auf Servern von Supabase in der EU (Irland) gespeichert. Die Übertragung erfolgt verschlüsselt über HTTPS. Wir treffen angemessene technische und organisatorische Maßnahmen zum Schutz Ihrer Daten.</p>
+<p>Alle Nutzerdaten werden auf Servern in der Europäischen Union gespeichert (Supabase,
+Region EU West — Irland, eu-west-1). Eine Übertragung in Drittländer findet nicht statt,
+mit Ausnahme der Nutzung des KI-Assistenten (siehe Abschnitt 10).</p>
+<p>Die Übertragung erfolgt verschlüsselt über HTTPS. Wir treffen angemessene technische
+und organisatorische Maßnahmen zum Schutz Ihrer Daten.</p>
 
 <h2>6. Speicherdauer</h2>
 <p>Ihre Daten werden gespeichert, solange Sie ein aktives Konto bei Klarer Gewinn haben. Nach Löschung Ihres Kontos werden alle personenbezogenen Daten innerhalb von 30 Tagen gelöscht.</p>
@@ -65,13 +70,35 @@ module.exports = async function(req, res) {
   <li>Recht auf Datenübertragbarkeit (Art. 20 DSGVO)</li>
   <li>Widerspruchsrecht (Art. 21 DSGVO)</li>
 </ul>
-<p>Zur Ausübung Ihrer Rechte wenden Sie sich bitte an: <a href="mailto:nath132@yahoo.com">nath132@yahoo.com</a></p>
+<p>Zur Ausübung Ihrer Rechte wenden Sie sich bitte an: <a href="mailto:hello@klarergewinn.de">hello@klarergewinn.de</a></p>
 
 <h2>8. Beschwerderecht</h2>
 <p>Sie haben das Recht, sich bei einer Datenschutzaufsichtsbehörde zu beschweren. Die zuständige Behörde in Hessen ist der Hessische Beauftragte für Datenschutz und Informationsfreiheit: <a href="https://www.datenschutz.hessen.de" target="_blank">www.datenschutz.hessen.de</a></p>
 
 <h2>9. Änderungen dieser Datenschutzerklärung</h2>
 <p>Wir behalten uns vor, diese Datenschutzerklärung bei Bedarf anzupassen. Die aktuelle Version ist stets unter dieser URL abrufbar.</p>
+
+<h2>10. KI-Assistent</h2>
+<p>Der KI-Assistent verwendet die Claude API von Anthropic (Anthropic PBC, San Francisco, USA).
+Anfragen an den KI-Assistenten werden zur Verarbeitung an Anthropic übermittelt.
+Anthropic verarbeitet Daten gemäß ihrer Datenschutzrichtlinie:
+<a href="https://www.anthropic.com/privacy" target="_blank">anthropic.com/privacy</a>.</p>
+<p><strong>Wichtiger Hinweis:</strong> Der KI-Assistent ist kein zugelassener Steuerberater
+und ersetzt keine steuerliche Beratung durch einen zertifizierten Fachmann. Angaben ohne Gewähr.</p>
+
+<h2>11. Rechtsgrundlage — KI-Assistent und StBerG</h2>
+<p>Die Nutzung des KI-Assistenten stellt keine Steuerberatung im Sinne des
+Steuerberatungsgesetzes (StBerG) dar. Der Assistent liefert ausschließlich allgemeine
+Informationen zu Buchhaltungs- und Steuerthemen. Für verbindliche steuerliche Auskünfte
+wenden Sie sich bitte an einen zugelassenen Steuerberater.</p>
+
+<h2>12. EU KI-Verordnung (AI Act)</h2>
+<p>Gemäß EU KI-Verordnung (EU) 2024/1689 weisen wir darauf hin, dass Klarer Gewinn einen
+KI-Assistenten einsetzt, der auf dem Sprachmodell Claude von Anthropic basiert.
+Das System ist als allgemeines KI-Werkzeug eingestuft und fällt nicht unter die
+Hochrisiko-Kategorie gemäß Anhang III der EU KI-Verordnung.</p>
+<p>Zur Ausübung Ihrer Rechte wenden Sie sich bitte an:
+<a href="mailto:hello@klarergewinn.de">hello@klarergewinn.de</a></p>
 
 <div class="footer">
   <p>Klarer Gewinn — Buchhaltung für Selbstständige</p>
