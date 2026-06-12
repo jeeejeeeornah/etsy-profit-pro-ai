@@ -1,13 +1,11 @@
-import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { createClient } = require('@supabase/supabase-js');
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-// Map every live price ID to a tier
 const PRICE_TO_TIER = {
   'price_1TfgvMBHNCUGz5G4ZmzIx7z5': 'pro',       // Pro monthly €9.99
   'price_1ThEWjBHNCUGz5G4BrSB8x4l': 'pro',       // Pro annual €99
@@ -15,7 +13,7 @@ const PRICE_TO_TIER = {
   'price_1ThEW4BHNCUGz5G4dllF2JQZ': 'business',  // Business annual €279
 };
 
-export const config = { api: { bodyParser: false } };
+module.exports.config = { api: { bodyParser: false } };
 
 async function readRawBody(req) {
   const chunks = [];
@@ -23,7 +21,7 @@ async function readRawBody(req) {
   return Buffer.concat(chunks);
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
   let event;
@@ -42,15 +40,15 @@ export default async function handler(req, res) {
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    const userId = session.metadata?.userId;
+    const userId = session.metadata && session.metadata.userId;
 
     try {
       const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 1 });
-      const priceId = lineItems.data[0]?.price?.id;
+      const priceId = lineItems.data[0] && lineItems.data[0].price && lineItems.data[0].price.id;
       const tier = PRICE_TO_TIER[priceId];
 
       if (!userId || !tier) {
-        console.error('Missing userId or unknown price:', { userId, priceId });
+        console.error('Missing userId or unknown price:', userId, priceId);
         return res.status(200).json({ received: true, skipped: true });
       }
 
@@ -64,7 +62,7 @@ export default async function handler(req, res) {
         return res.status(500).json({ error: error.message });
       }
 
-      console.log(`Upgraded user ${userId} to ${tier}`);
+      console.log('Upgraded user ' + userId + ' to ' + tier);
     } catch (err) {
       console.error('Handler error:', err.message);
       return res.status(500).json({ error: err.message });
@@ -72,4 +70,4 @@ export default async function handler(req, res) {
   }
 
   return res.status(200).json({ received: true });
-}
+};
