@@ -24,7 +24,7 @@ module.exports = async function(req, res) {
     }
     const session = await stripe.billingPortal.sessions.create({
       customer: customerId,
-      return_url: 'klarergewinn://',
+      return_url: 'https://klarergewinn.de/subscription-return',
     });
     res.status(200).json({ url: session.url });
   } catch(e) {
