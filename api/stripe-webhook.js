@@ -89,25 +89,42 @@ module.exports = async function handler(req, res) {
     const subscription = event.data.object;
     const customerId = subscription.customer;
     const status = subscription.status;
-    // Downgrade only when the subscription is no longer providing access.
-    const inactive = ['canceled', 'unpaid', 'incomplete_expired'].includes(status);
     try {
-      if (inactive && customerId) {
-        const { data, error } = await supabase
-          .from('profiles')
-          .update({ subscription_tier: 'free' })
-          .eq('stripe_customer_id', customerId)
-          .select('id');
-        if (error) {
-          console.error('Supabase downgrade (updated) failed:', error.message);
-          return res.status(500).json({ error: error.message });
-        }
-        if (!data || data.length === 0) {
-          console.error('No profile matched customer on update:', customerId);
-          return res.status(200).json({ received: true, no_match: true });
-        }
-        console.log('Downgraded customer ' + customerId + ' to free (status ' + status + ')');
+      if (!customerId) {
+        return res.status(200).json({ received: true, skipped: true });
       }
+      // If the subscription is no longer providing access, drop to free.
+      const inactive = ['canceled', 'unpaid', 'incomplete_expired'].includes(status);
+      let newTier;
+      if (inactive) {
+        newTier = 'free';
+      } else {
+        // Active/trialing/past_due: re-map tier from the CURRENT price,
+        // so plan switches (Pro<->Business) update the profile.
+        const priceId = subscription.items
+          && subscription.items.data[0]
+          && subscription.items.data[0].price
+          && subscription.items.data[0].price.id;
+        newTier = PRICE_TO_TIER[priceId];
+        if (!newTier) {
+          console.error('Unknown price on subscription.updated:', priceId);
+          return res.status(200).json({ received: true, skipped: true });
+        }
+      }
+      const { data, error } = await supabase
+        .from('profiles')
+        .update({ subscription_tier: newTier })
+        .eq('stripe_customer_id', customerId)
+        .select('id');
+      if (error) {
+        console.error('Supabase update (updated) failed:', error.message);
+        return res.status(500).json({ error: error.message });
+      }
+      if (!data || data.length === 0) {
+        console.error('No profile matched customer on update:', customerId);
+        return res.status(200).json({ received: true, no_match: true });
+      }
+      console.log('Set customer ' + customerId + ' to ' + newTier + ' (status ' + status + ')');
     } catch (err) {
       console.error('Update handler error:', err.message);
       return res.status(500).json({ error: err.message });
