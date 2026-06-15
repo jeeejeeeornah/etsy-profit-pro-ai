@@ -1,1 +1,5 @@
-factur-x
+factur-x==4.3
+lxml==6.1.1
+pypdf==6.13.2
+reportlab==4.5.1
+saxonche==13.0.0
