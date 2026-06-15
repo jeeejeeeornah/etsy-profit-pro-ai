@@ -29,17 +29,37 @@ from pypdf.generic import (
     NameObject, NumberObject, create_string_object,
 )
 
+import importlib.util
 import facturx
-import reportlab.fonts as _rl_fonts_pkg
 
 # ── Asset paths (all relative — no system-path fallbacks) ─────────────────────
+#
+# _HERE uses the script's own __file__, which Vercel/Lambda always sets for the
+# deployed function file itself (e.g. /var/task/api/generate-invoice.py).
+#
+# Vera font location uses importlib.util.find_spec instead of
+# reportlab.fonts.__file__ — the latter is None in some bundled environments
+# (confirmed crash on Vercel). find_spec uses the module finder/loader and
+# works correctly even when __file__ is absent.
 
-_HERE       = os.path.dirname(os.path.abspath(__file__))
-_RL_FONTS   = os.path.dirname(_rl_fonts_pkg.__file__)
+_INIT_ERROR = None
+ICC_PROFILE = SANS_REG = SANS_BOLD = None
 
-ICC_PROFILE = os.path.join(_HERE, 'assets', 'sRGB.icc')
-SANS_REG    = os.path.join(_RL_FONTS, 'Vera.ttf')    # Bitstream Vera Sans
-SANS_BOLD   = os.path.join(_RL_FONTS, 'VeraBd.ttf')  # Bitstream Vera Sans Bold
+try:
+    _HERE = os.path.dirname(os.path.abspath(__file__))
+
+    def _rl_fonts_dir():
+        spec = importlib.util.find_spec('reportlab.fonts')
+        if spec and spec.submodule_search_locations:
+            return list(spec.submodule_search_locations)[0]
+        raise RuntimeError('Cannot locate reportlab.fonts via find_spec')
+
+    ICC_PROFILE = os.path.join(_HERE, 'assets', 'sRGB.icc')
+    _RL_FONTS   = _rl_fonts_dir()
+    SANS_REG    = os.path.join(_RL_FONTS, 'Vera.ttf')    # Bitstream Vera Sans
+    SANS_BOLD   = os.path.join(_RL_FONTS, 'VeraBd.ttf')  # Bitstream Vera Sans Bold
+except Exception:
+    _INIT_ERROR = traceback.format_exc()
 
 # ── Constants ──────────────────────────────────────────────────────────────────
 
@@ -345,6 +365,9 @@ class handler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_POST(self):
+        if _INIT_ERROR:
+            return self._json(500, {'error': 'Function initialisation failed', 'detail': _INIT_ERROR})
+
         # Parse body
         try:
             length = int(self.headers.get('Content-Length', 0))
