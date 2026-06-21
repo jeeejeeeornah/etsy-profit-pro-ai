@@ -37,7 +37,7 @@ module.exports = async function(req, res) {
 <ul>
   <li><strong>Free-Tarif:</strong> Erfassung von Einnahmen und Ausgaben, Dashboard, Steuerrechner</li>
   <li><strong>Pro-Tarif:</strong> Zusätzlich KI-gestützter Belegscanner (GoBD-konform), KI-Assistent, EÜR-Export, automatische E-Mail-Berichte</li>
-  <li><strong>Business-Tarif:</strong> Zusätzlich Rechnungs- und Angebotserstellung, Fahrtenbuch, Verwaltung mehrerer Betriebe, DATEV-Export</li>
+  <li><strong>Business-Tarif:</strong> Zusätzlich Rechnungs- und Angebotserstellung, Fahrtenbuch, Verwaltung mehrerer Betriebe. (DATEV-Export in Vorbereitung.)</li>
 </ul>
 <p>Der KI-Assistent liefert allgemeine Informationen zu Buchhaltungs- und Steuerthemen. Er stellt keine Steuerberatung im Sinne des Steuerberatungsgesetzes (StBerG) dar.</p>
 
@@ -49,12 +49,13 @@ module.exports = async function(req, res) {
 <p>Die aktuellen Preise für die kostenpflichtigen Tarife sind in der App und auf der Website einsehbar:</p>
 <ul>
   <li><strong>Pro monatlich:</strong> €9,99/Monat</li>
-  <li><strong>Pro jährlich:</strong> €95,88/Jahr (€7,99/Monat)</li>
+  <li><strong>Pro jährlich:</strong> €99/Jahr</li>
   <li><strong>Business monatlich:</strong> €27,99/Monat</li>
-  <li><strong>Business jährlich:</strong> €224/Jahr (€18,67/Monat)</li>
+  <li><strong>Business jährlich:</strong> €279/Jahr</li>
 </ul>
 <p>Alle Preise sind Endpreise. Als Kleinunternehmer gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen.</p>
-<p>Die Abrechnung erfolgt über Stripe (Stripe Payments Europe Limited, Irland). Es gelten die Zahlungsbedingungen von Stripe. Akzeptierte Zahlungsmethoden: Kreditkarte, SEPA-Lastschrift, Apple Pay.</p>
+<p><strong>Abonnements innerhalb der iOS-App</strong> werden über Apple (App Store / In-App-Kauf) abgeschlossen und abgerechnet. Es gelten die Zahlungs- und Abonnementbedingungen von Apple. Maßgeblich ist der zum Zeitpunkt des Kaufs im App Store angezeigte Preis. Die Zahlung wird über das im Apple-Konto hinterlegte Zahlungsmittel abgewickelt.</p>
+<p><strong>Abonnements über die Website</strong> werden über Stripe (Stripe Payments Europe Limited, Irland) abgerechnet. Akzeptierte Zahlungsmethoden: Kreditkarte, SEPA-Lastschrift. Es gelten ergänzend die Zahlungsbedingungen von Stripe.</p>
 <p>Bei jährlichen Abonnements wird der Gesamtbetrag zu Beginn der Laufzeit fällig.</p>
 
 <h2>§ 5 Widerrufsrecht</h2>
