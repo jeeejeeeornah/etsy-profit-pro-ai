@@ -36,29 +36,44 @@ module.exports = async function(req, res) {
   <li>E-Mail-Adresse (für die Registrierung und Anmeldung)</li>
   <li>Finanzdaten (Einnahmen und Ausgaben, die Sie selbst eingeben)</li>
   <li>Belegfotos (wenn Sie die Belegscan-Funktion nutzen)</li>
-  <li>Steuernummer (optional, wenn Sie diese eingeben)</li>
+  <li>Rechnungs- und Angebotsdaten (Empfängername, Anschrift sowie Positionen, wenn Sie Rechnungen oder Angebote erstellen)</li>
+  <li>Profil- und Unternehmensdaten (z. B. Firmenname, Anschrift, IBAN, Steuernummer — soweit Sie diese eingeben)</li>
+  <li>Abonnement- und Zahlungsstatus (zur Verwaltung kostenpflichtiger Tarife)</li>
 </ul>
 
 <h2>3. Zweck der Datenverarbeitung</h2>
-<p>Die erhobenen Daten werden ausschließlich zur Bereitstellung der Buchhaltungsfunktionen der App verwendet. Eine Weitergabe an Dritte erfolgt nicht, mit Ausnahme der nachfolgend genannten Dienstleister.</p>
+<p>Die erhobenen Daten werden ausschließlich zur Bereitstellung der Buchhaltungs-, Rechnungs- und Abonnementfunktionen der App verwendet. Eine Weitergabe an Dritte erfolgt nicht, mit Ausnahme der nachfolgend genannten Dienstleister.</p>
 
 <h2>4. Dienstleister und Drittanbieter</h2>
 <p>Wir nutzen folgende Drittanbieter zur Bereitstellung unserer Dienste:</p>
 <ul>
-  <li><strong>Supabase</strong> (Irland/EU) — Datenbankhosting und Authentifizierung. Datenschutzerklärung: <a href="https://supabase.com/privacy" target="_blank">supabase.com/privacy</a></li>
-  <li><strong>Vercel</strong> (USA) — Hosting der API-Endpunkte. Datenschutzerklärung: <a href="https://vercel.com/legal/privacy-policy" target="_blank">vercel.com/legal/privacy-policy</a></li>
-  <li><strong>Anthropic</strong> (USA) — KI-gestützte Funktionen (AI-Chat und Belegscan). Datenschutzerklärung: <a href="https://www.anthropic.com/privacy" target="_blank">anthropic.com/privacy</a></li>
+  <li><strong>Supabase</strong> (Irland/EU) — Datenbankhosting und Authentifizierung. <a href="https://supabase.com/privacy" target="_blank">supabase.com/privacy</a></li>
+  <li><strong>Vercel</strong> (USA) — Hosting der API-Endpunkte. <a href="https://vercel.com/legal/privacy-policy" target="_blank">vercel.com/legal/privacy-policy</a></li>
+  <li><strong>Anthropic</strong> (USA) — KI-gestützte Funktionen (KI-Assistent und Belegscan). Bei der Belegscan-Funktion werden hochgeladene Belegbilder zur Datenextraktion an Anthropic übermittelt. <a href="https://www.anthropic.com/privacy" target="_blank">anthropic.com/privacy</a></li>
+  <li><strong>Apple</strong> (USA) — Abwicklung von In-App-Käufen und Abonnements innerhalb der iOS-App. <a href="https://www.apple.com/legal/privacy/" target="_blank">apple.com/legal/privacy</a></li>
+  <li><strong>RevenueCat</strong> (USA) — Verwaltung von In-App-Abonnements (iOS). <a href="https://www.revenuecat.com/privacy" target="_blank">revenuecat.com/privacy</a></li>
+  <li><strong>Stripe</strong> (Irland/EU) — Zahlungsabwicklung ausschließlich für über die Website abgeschlossene Abonnements. <a href="https://stripe.com/privacy" target="_blank">stripe.com/privacy</a></li>
+  <li><strong>Brevo</strong> (Sendinblue GmbH, EU) — Versand von E-Mail-Berichten (z. B. EÜR-Export). <a href="https://www.brevo.com/legal/privacypolicy/" target="_blank">brevo.com/legal/privacypolicy</a></li>
 </ul>
 
-<h2>5. Datenspeicherung und Sicherheit</h2>
-<p>Alle Nutzerdaten werden auf Servern in der Europäischen Union gespeichert (Supabase,
-Region EU West — Irland, eu-west-1). Eine Übertragung in Drittländer findet nicht statt,
-mit Ausnahme der Nutzung des KI-Assistenten (siehe Abschnitt 10).</p>
-<p>Die Übertragung erfolgt verschlüsselt über HTTPS. Wir treffen angemessene technische
-und organisatorische Maßnahmen zum Schutz Ihrer Daten.</p>
+<h2>5. Datenspeicherung, Sicherheit und Drittlandübermittlung</h2>
+<p>Alle Nutzerdaten werden primär auf Servern in der Europäischen Union gespeichert (Supabase,
+Region EU West — Irland, eu-west-1). Die Übertragung erfolgt verschlüsselt über HTTPS. Wir treffen
+angemessene technische und organisatorische Maßnahmen zum Schutz Ihrer Daten.</p>
+<p>Bei der Nutzung einzelner Funktionen werden Daten an Dienstleister mit Sitz in den USA
+übermittelt (Vercel, Anthropic, Apple, RevenueCat — siehe Abschnitt 4). Diese Übermittlung
+erfolgt auf Grundlage der EU-Standardvertragsklauseln (Standard Contractual Clauses) bzw.,
+soweit zertifiziert, des EU-US Data Privacy Framework.</p>
 
 <h2>6. Speicherdauer</h2>
-<p>Ihre Daten werden gespeichert, solange Sie ein aktives Konto bei Klarer Gewinn haben. Nach Löschung Ihres Kontos werden alle personenbezogenen Daten innerhalb von 30 Tagen gelöscht.</p>
+<p>Ihre Daten werden grundsätzlich gespeichert, solange Sie ein aktives Konto bei Klarer Gewinn
+haben. Nach Löschung Ihres Kontos werden personenbezogene Daten innerhalb von 30 Tagen gelöscht.</p>
+<p><strong>Ausnahme — gesetzliche Aufbewahrungspflichten:</strong> Daten, die steuer- oder
+handelsrechtlichen Aufbewahrungspflichten unterliegen (insbesondere Rechnungen, Belege und
+buchhalterische Aufzeichnungen gemäß § 147 AO und den GoBD), werden für die gesetzlich
+vorgeschriebene Dauer von bis zu 10 Jahren aufbewahrt und erst nach Ablauf dieser Frist gelöscht.
+Dies gilt auch nach Löschung des Kontos und besteht unabhängig von einem Löschverlangen nach
+Art. 17 DSGVO.</p>
 
 <h2>7. Ihre Rechte</h2>
 <p>Sie haben folgende Rechte bezüglich Ihrer personenbezogenen Daten:</p>
