@@ -1,3 +1,4 @@
+const { getUserId } = require('./_auth');
 const { createClient } = require('@supabase/supabase-js');
 
 const supabase = createClient(
@@ -12,8 +13,9 @@ module.exports = async function(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   try {
-    const { userId } = req.body;
-    if (!userId) return res.status(400).json({ error: 'userId required' });
+    const auth = await getUserId(req);
+    if (auth.error) return res.status(auth.status).json({ error: auth.error });
+    const userId = auth.userId;
 
     // Get token from Supabase
     const { data: tokenRow } = await supabase

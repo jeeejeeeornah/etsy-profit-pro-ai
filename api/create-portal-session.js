@@ -1,3 +1,4 @@
+const { getUserId } = require('./_auth');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { createClient } = require('@supabase/supabase-js');
 const supabase = createClient(
@@ -10,7 +11,9 @@ module.exports = async function(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
   try {
-    const { userId } = req.body;
+    const auth = await getUserId(req);
+    if (auth.error) return res.status(auth.status).json({ error: auth.error });
+    const userId = auth.userId;
     const { data: profile } = await supabase
       .from('profiles')
       .select('stripe_customer_id, email')
