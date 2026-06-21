@@ -1,7 +1,6 @@
 module.exports = async function(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
-
   const html = `<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -19,35 +18,29 @@ module.exports = async function(req, res) {
 </head>
 <body>
 <h1>Impressum</h1>
-
-<h2>Angaben gemäß § 5 TMG</h2>
+<h2>Angaben gemäß § 5 DDG</h2>
 <p>
   Nathan Zinzan Goundar<br>
   Rheinstraße 84<br>
   65185 Wiesbaden<br>
   Deutschland
 </p>
-
 <h2>Kontakt</h2>
 <p>
   Telefon: +49 178 2074363<br>
   E-Mail: <a href="mailto:hello@klarergewinn.de">hello@klarergewinn.de</a>
 </p>
-
 <h2>Umsatzsteuer</h2>
 <p>
-  Kleinunternehmer gemäß § 19 UStG — Es wird keine Umsatzsteuer berechnet.<br>
-  Steuer-Nr.: 10984625704
+  Kleinunternehmer gemäß § 19 UStG — Es wird keine Umsatzsteuer berechnet.
 </p>
-
-<h2>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
+<h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
 <p>
   Nathan Zinzan Goundar<br>
   Rheinstraße 84<br>
   65185 Wiesbaden<br>
   Deutschland
 </p>
-
 <h2>Hinweis KI-Assistent</h2>
 <div class="notice">
   Der in der App verwendete KI-Assistent stellt keine Steuerberatung im Sinne des
@@ -55,7 +48,6 @@ module.exports = async function(req, res) {
   Information zu Buchhaltungs- und Steuerthemen. Für verbindliche steuerliche Auskünfte
   wenden Sie sich an einen zugelassenen Steuerberater.
 </div>
-
 <h2>Streitschlichtung</h2>
 <p>
   Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:<br>
@@ -63,25 +55,21 @@ module.exports = async function(req, res) {
 </p>
 <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer
 Verbraucherschlichtungsstelle teilzunehmen.</p>
-
 <h2>Haftung für Inhalte</h2>
-<p>Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten
-nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als
+<p>Als Diensteanbieter sind wir gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten
+nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG sind wir als
 Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde
 Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige
 Tätigkeit hinweisen.</p>
-
 <h2>Haftung für Links</h2>
 <p>Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen
 Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen.
 Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der
 Seiten verantwortlich.</p>
-
 <div class="footer">
   <p>Klarer Gewinn — Buchhaltung für Selbstständige · <a href="https://klarergewinn.de">klarergewinn.de</a></p>
 </div>
 </body>
 </html>`;
-
   return res.status(200).send(html);
 };
