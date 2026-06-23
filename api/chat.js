@@ -1,13 +1,28 @@
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   if (req.method === 'OPTIONS') return res.status(200).end();
+
+  // --- auth: require a valid Supabase JWT ---
+  const authHeader = req.headers['authorization'] || '';
+  const token = authHeader.replace(/^Bearer\s+/i, '');
+  if (!token) return res.status(401).json({ error: 'auth required' });
+  try {
+    const ar = await fetch('https://dajqkdztttavidnpijda.supabase.co/auth/v1/user', {
+      headers: { 'Authorization': 'Bearer ' + token, 'apikey': process.env.SUPABASE_ANON_KEY }
+    });
+    if (!ar.ok) return res.status(401).json({ error: 'invalid token' });
+    const user = await ar.json();
+    if (!user || !user.id) return res.status(401).json({ error: 'invalid token' });
+  } catch (e) {
+    return res.status(401).json({ error: 'auth check failed' });
+  }
+  // --- end auth ---
 
   try {
     const { messages, system } = req.body;
     const filtered = (messages || []).filter(m => m.role === 'user' || m.role === 'assistant');
-
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -22,7 +37,6 @@ export default async function handler(req, res) {
         messages: filtered
       })
     });
-
     const data = await response.json();
     res.status(200).json(data);
   } catch(e) {
