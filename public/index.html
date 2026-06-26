@@ -730,7 +730,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:60px 0 0}
       <p>Kostenlos starten. Upgraden wenn du bereit bist.</p>
       <div class="price-toggle">
         <button class="tog on" id="togM" onclick="setToggle('monthly')">Monatlich</button>
-        <button class="tog" id="togA" onclick="setToggle('annual')">Jährlich <span class="save">-20%</span></button>
+        <button class="tog" id="togA" onclick="setToggle('annual')">Jährlich <span class="save">-17%</span></button>
       </div>
     </div>
     <div class="price-grid">
@@ -925,10 +925,10 @@ function setToggle(mode){
   document.getElementById('togM').classList.toggle('on',mode==='monthly');
   document.getElementById('togA').classList.toggle('on',mode==='annual');
   if(mode==='annual'){
-    document.getElementById('proAmt').textContent='€7,99';
-    document.getElementById('proBill').textContent='× 12 = €95,88 / Jahr';
-    document.getElementById('bizAmt').textContent='€22,39';
-    document.getElementById('bizBill').textContent='× 12 = €268,68 / Jahr';
+    document.getElementById('proAmt').textContent='€8,25';
+    document.getElementById('proBill').textContent='× 12 = €99 / Jahr';
+    document.getElementById('bizAmt').textContent='€23,25';
+    document.getElementById('bizBill').textContent='× 12 = €279 / Jahr';
   } else {
     document.getElementById('proAmt').textContent='€9,99';
     document.getElementById('proBill').innerHTML='&nbsp;';
