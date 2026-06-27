@@ -7,16 +7,16 @@ export default async function handler(req, res) {
   // --- auth: require a valid Supabase JWT ---
   const authHeader = req.headers['authorization'] || '';
   const token = authHeader.replace(/^Bearer\s+/i, '');
-  if (!token) return res.status(401).json({ error: 'auth required' });
+  if (!token) return res.status(401).json({ error: 'DEBUG-1-no-token' });
   try {
     const ar = await fetch('https://dajqkdztttavidnpijda.supabase.co/auth/v1/user', {
       headers: { 'Authorization': 'Bearer ' + token, 'apikey': process.env.SUPABASE_ANON_KEY }
     });
-    if (!ar.ok) return res.status(401).json({ error: 'invalid token' });
+    if (!ar.ok) return res.status(401).json({ error: 'DEBUG-2-supabase-rejected', supastatus: ar.status });
     const user = await ar.json();
-    if (!user || !user.id) return res.status(401).json({ error: 'invalid token' });
+    if (!user || !user.id) return res.status(401).json({ error: 'DEBUG-3-no-user-id' });
   } catch (e) {
-    return res.status(401).json({ error: 'auth check failed' });
+    return res.status(401).json({ error: 'DEBUG-4-fetch-threw', detail: String(e) });
   }
   // --- end auth ---
 
