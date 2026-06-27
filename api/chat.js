@@ -12,10 +12,15 @@ export default async function handler(req, res) {
     const ar = await fetch('https://dajqkdztttavidnpijda.supabase.co/auth/v1/user', {
       headers: { 'Authorization': 'Bearer ' + token, 'apikey': process.env.SUPABASE_ANON_KEY }
     });
-    if (!ar.ok) return res.status(401).json({ error: 'DEBUG-2-supabase-rejected', supastatus: ar.status });
+    if (!ar.ok) {
+      const errBody = await ar.text().catch(() => '');
+      console.log('CHATDEBUG supabase rejected, status=' + ar.status + ' body=' + errBody);
+      return res.status(401).json({ error: 'DEBUG-2-supabase-rejected', supastatus: ar.status });
+    }
     const user = await ar.json();
     if (!user || !user.id) return res.status(401).json({ error: 'DEBUG-3-no-user-id' });
   } catch (e) {
+    console.log('CHATDEBUG fetch threw: ' + String(e));
     return res.status(401).json({ error: 'DEBUG-4-fetch-threw', detail: String(e) });
   }
   // --- end auth ---
