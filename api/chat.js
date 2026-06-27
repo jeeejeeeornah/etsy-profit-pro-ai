@@ -4,24 +4,6 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  // TEMP DEBUG — remove later
-  if (req.method === 'POST') {
-    const ah = req.headers['authorization'] || '';
-    const tok = ah.replace(/^Bearer\s+/i, '');
-    let probe = 'no-token-sent';
-    if (tok) {
-      try {
-        const r = await fetch('https://dajqkdztttavidnpijda.supabase.co/auth/v1/user', {
-          headers: { 'Authorization': 'Bearer ' + tok, 'apikey': process.env.SUPABASE_ANON_KEY || 'MISSING' }
-        });
-        const b = await r.text();
-        probe = 'status=' + r.status + ' anonkey=' + (process.env.SUPABASE_ANON_KEY ? 'present' : 'MISSING') + ' body=' + b.slice(0, 180);
-      } catch (e) { probe = 'fetch-threw: ' + String(e); }
-    }
-    return res.status(200).json({ content: [{ type: 'text', text: 'DEBUG → ' + probe }] });
-  }
-
-  // --- auth: require a valid Supabase JWT ---
   const authHeader = req.headers['authorization'] || '';
   const token = authHeader.replace(/^Bearer\s+/i, '');
   if (!token) return res.status(401).json({ error: 'auth required' });
@@ -35,7 +17,6 @@ export default async function handler(req, res) {
   } catch (e) {
     return res.status(401).json({ error: 'auth check failed' });
   }
-  // --- end auth ---
 
   try {
     const { messages, system } = req.body;
