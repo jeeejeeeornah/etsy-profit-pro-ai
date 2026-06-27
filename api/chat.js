@@ -1,12 +1,13 @@
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-KG-Internal');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const SUPA = 'https://dajqkdztttavidnpijda.supabase.co';
   const SROLE = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const LIMITS = { free: 10, pro: 100, business: 100 };
+  const isInternal = (req.headers['x-kg-internal'] || '') === 'summary';
 
   // --- auth: require a valid Supabase JWT ---
   const authHeader = req.headers['authorization'] || '';
@@ -27,42 +28,42 @@ export default async function handler(req, res) {
   }
   // --- end auth ---
 
-  // --- usage cap (fail-OPEN: any error here lets the call through) ---
-  const ym = new Date().toISOString().slice(0, 7); // "YYYY-MM"
+  // --- usage cap (skipped entirely for internal summary calls; fail-OPEN otherwise) ---
+  const ym = new Date().toISOString().slice(0, 7);
   let currentCount = 0;
   let capActive = false;
-  try {
-    // tier
-    let tier = 'free';
+  if (!isInternal) {
     try {
-      const pr = await fetch(SUPA + '/rest/v1/profiles?id=eq.' + userId + '&select=subscription_tier', {
-        headers: { 'apikey': SROLE, 'Authorization': 'Bearer ' + SROLE }
-      });
-      if (pr.ok) {
-        const rows = await pr.json();
-        if (rows[0] && rows[0].subscription_tier) tier = rows[0].subscription_tier;
+      let tier = 'free';
+      try {
+        const pr = await fetch(SUPA + '/rest/v1/profiles?id=eq.' + userId + '&select=subscription_tier', {
+          headers: { 'apikey': SROLE, 'Authorization': 'Bearer ' + SROLE }
+        });
+        if (pr.ok) {
+          const rows = await pr.json();
+          if (rows[0] && rows[0].subscription_tier) tier = rows[0].subscription_tier;
+        }
+      } catch (e) {}
+
+      const limit = LIMITS[tier] != null ? LIMITS[tier] : 100;
+
+      try {
+        const ur = await fetch(SUPA + '/rest/v1/ki_usage?user_id=eq.' + userId + '&year_month=eq.' + ym + '&select=count', {
+          headers: { 'apikey': SROLE, 'Authorization': 'Bearer ' + SROLE }
+        });
+        if (ur.ok) {
+          const rows = await ur.json();
+          if (rows[0] && typeof rows[0].count === 'number') currentCount = rows[0].count;
+        }
+      } catch (e) {}
+
+      capActive = true;
+      if (currentCount >= limit) {
+        return res.status(429).json({ error: 'limit_reached', tier: tier, limit: limit });
       }
-    } catch (e) { /* default free */ }
-
-    const limit = LIMITS[tier] != null ? LIMITS[tier] : 100;
-
-    // current usage
-    try {
-      const ur = await fetch(SUPA + '/rest/v1/ki_usage?user_id=eq.' + userId + '&year_month=eq.' + ym + '&select=count', {
-        headers: { 'apikey': SROLE, 'Authorization': 'Bearer ' + SROLE }
-      });
-      if (ur.ok) {
-        const rows = await ur.json();
-        if (rows[0] && typeof rows[0].count === 'number') currentCount = rows[0].count;
-      }
-    } catch (e) { /* treat as 0 */ }
-
-    capActive = true;
-    if (currentCount >= limit) {
-      return res.status(429).json({ error: 'limit_reached', tier: tier, limit: limit });
+    } catch (e) {
+      capActive = false;
     }
-  } catch (e) {
-    capActive = false; // fail open
   }
   // --- end usage cap ---
 
@@ -85,8 +86,7 @@ export default async function handler(req, res) {
     });
     const data = await response.json();
 
-    // increment AFTER success (best-effort, upsert via REST)
-    if (capActive) {
+    if (capActive && !isInternal) {
       try {
         await fetch(SUPA + '/rest/v1/ki_usage', {
           method: 'POST',
@@ -98,7 +98,7 @@ export default async function handler(req, res) {
           },
           body: JSON.stringify({ user_id: userId, year_month: ym, count: currentCount + 1, updated_at: new Date().toISOString() })
         });
-      } catch (e) { /* ignore */ }
+      } catch (e) {}
     }
 
     res.status(200).json(data);
