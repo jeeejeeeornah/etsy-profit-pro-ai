@@ -1,0 +1,11 @@
+node_modules/
+venv/
+*.pdf
+
+# Secrets — never commit pulled env files (`vercel env pull` writes plaintext)
+.env
+.env.*
+*.env
+
+# Vercel CLI local state
+.vercel
