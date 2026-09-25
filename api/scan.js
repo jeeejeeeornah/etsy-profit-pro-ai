@@ -1,5 +1,23 @@
 const { getUserId } = require('./_auth');
 
+const SCAN_TIERS = ['pro', 'business'];
+
+// profiles.subscription_tier for userId: 'free' when the row or column is
+// empty, null when it could not be read at all.
+async function readTier(userId) {
+  try {
+    const r = await fetch(
+      'https://dajqkdztttavidnpijda.supabase.co/rest/v1/profiles?id=eq.' + encodeURIComponent(userId) + '&select=subscription_tier',
+      { headers: { 'apikey': process.env.SUPABASE_SERVICE_KEY, 'Authorization': 'Bearer ' + process.env.SUPABASE_SERVICE_KEY } }
+    );
+    if (!r.ok) return null;
+    const rows = await r.json();
+    return (rows[0] && rows[0].subscription_tier) || 'free';
+  } catch (e) {
+    return null;
+  }
+}
+
 module.exports = async function(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -10,6 +28,18 @@ module.exports = async function(req, res) {
     const auth = await getUserId(req);
     if (auth.error) return res.status(auth.status).json({ error: auth.error });
     const userId = auth.userId;
+
+    // Tier gate — the receipt scanner is Pro+ (the app gates it with
+    // requirePro). Enforced here too so the server never trusts the client:
+    // checked BEFORE any storage read or model call, so a refused request costs
+    // nothing. Source is profiles.subscription_tier, maintained by the
+    // RevenueCat webhook. Fails CLOSED with a retryable 503 if the tier can't
+    // be read, rather than handing out a paid feature.
+    const tier = await readTier(userId);
+    if (tier === null) return res.status(503).json({ error: 'tier_unavailable' });
+    if (!SCAN_TIERS.includes(tier)) {
+      return res.status(403).json({ error: 'upgrade_required', required: 'pro', tier: tier });
+    }
 
     const r = await fetch('https://dajqkdztttavidnpijda.supabase.co/storage/v1/object/list/receipts', {method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+process.env.SUPABASE_SERVICE_KEY,'apikey':process.env.SUPABASE_SERVICE_KEY},body:JSON.stringify({prefix:userId+'/',limit:100,sortBy:{column:'name',order:'desc'}})});
     const f = await r.json();

@@ -9,6 +9,7 @@
     "nodemailer": "^6.9.0"
   },
   "scripts": {
-    "build": "echo build"
+    "build": "echo build",
+    "test": "node --test 'test/*.test.mjs'"
   }
 }

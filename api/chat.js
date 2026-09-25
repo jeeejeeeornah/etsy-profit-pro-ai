@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-KG-Internal');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
@@ -28,38 +28,52 @@ export default async function handler(req, res) {
   }
   // --- end auth ---
 
-  // --- usage cap (skipped entirely for internal summary calls; fail-OPEN otherwise) ---
+  // This month's tier, limit and count — the single source for both the cap
+  // below and GET /api/chat (the app's "X / Y used" counter).
   const ym = new Date().toISOString().slice(0, 7);
+  async function readUsage() {
+    let tier = 'free';
+    try {
+      const pr = await fetch(SUPA + '/rest/v1/profiles?id=eq.' + userId + '&select=subscription_tier', {
+        headers: { 'apikey': SROLE, 'Authorization': 'Bearer ' + SROLE }
+      });
+      if (pr.ok) {
+        const rows = await pr.json();
+        if (rows[0] && rows[0].subscription_tier) tier = rows[0].subscription_tier;
+      }
+    } catch (e) {}
+
+    const limit = LIMITS[tier] != null ? LIMITS[tier] : 100;
+
+    let count = 0;
+    try {
+      const ur = await fetch(SUPA + '/rest/v1/ki_usage?user_id=eq.' + userId + '&year_month=eq.' + ym + '&select=count', {
+        headers: { 'apikey': SROLE, 'Authorization': 'Bearer ' + SROLE }
+      });
+      if (ur.ok) {
+        const rows = await ur.json();
+        if (rows[0] && typeof rows[0].count === 'number') count = rows[0].count;
+      }
+    } catch (e) {}
+    return { tier, limit, count };
+  }
+
+  // GET = read-only usage for the app's counter; no model call, nothing counted.
+  if (req.method === 'GET') {
+    const u = await readUsage();
+    return res.status(200).json({ tier: u.tier, used: u.count, limit: u.limit });
+  }
+
+  // --- usage cap (skipped entirely for internal summary calls; fail-OPEN otherwise) ---
   let currentCount = 0;
   let capActive = false;
   if (!isInternal) {
     try {
-      let tier = 'free';
-      try {
-        const pr = await fetch(SUPA + '/rest/v1/profiles?id=eq.' + userId + '&select=subscription_tier', {
-          headers: { 'apikey': SROLE, 'Authorization': 'Bearer ' + SROLE }
-        });
-        if (pr.ok) {
-          const rows = await pr.json();
-          if (rows[0] && rows[0].subscription_tier) tier = rows[0].subscription_tier;
-        }
-      } catch (e) {}
-
-      const limit = LIMITS[tier] != null ? LIMITS[tier] : 100;
-
-      try {
-        const ur = await fetch(SUPA + '/rest/v1/ki_usage?user_id=eq.' + userId + '&year_month=eq.' + ym + '&select=count', {
-          headers: { 'apikey': SROLE, 'Authorization': 'Bearer ' + SROLE }
-        });
-        if (ur.ok) {
-          const rows = await ur.json();
-          if (rows[0] && typeof rows[0].count === 'number') currentCount = rows[0].count;
-        }
-      } catch (e) {}
-
+      const u = await readUsage();
+      currentCount = u.count;
       capActive = true;
-      if (currentCount >= limit) {
-        return res.status(429).json({ error: 'limit_reached', tier: tier, limit: limit });
+      if (currentCount >= u.limit) {
+        return res.status(429).json({ error: 'limit_reached', tier: u.tier, limit: u.limit, used: currentCount });
       }
     } catch (e) {
       capActive = false;
