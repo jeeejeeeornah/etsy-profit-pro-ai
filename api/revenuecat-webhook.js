@@ -50,7 +50,10 @@ function msToIso(v) {
 
 // Records the delivery and reports whether we have seen this event id before.
 //
-// Returns 'new', 'duplicate', or 'unavailable'. 'unavailable' means the
+// Returns 'new', 'duplicate', 'retry', or 'unavailable'. 'duplicate' means the
+// event was already APPLIED; 'retry' means we recorded it before but never
+// applied it (e.g. no profile matched, so we answered 404 and RevenueCat is
+// redelivering) — the caller must try again, not skip it. 'unavailable' means the
 // revenuecat_events table does not exist yet (or is unreadable): we log and
 // carry on rather than failing the webhook, so audit/idempotency light up
 // automatically once the migration is applied, and subscription syncing keeps
@@ -81,7 +84,16 @@ async function recordEvent(event, action, resultingTier, appUserId) {
   if (!error) return 'new';
 
   // 23505 = unique_violation on event_id -> RevenueCat redelivered this event.
-  if (error.code === '23505') return 'duplicate';
+  // Only skip it if it was actually applied; an unapplied one is a retry.
+  // (Re-applying is safe: it sets the same subscription_tier again.)
+  if (error.code === '23505') {
+    const { data: prev } = await supabase
+      .from('revenuecat_events')
+      .select('applied')
+      .eq('event_id', String(event.id))
+      .maybeSingle();
+    return prev && prev.applied ? 'duplicate' : 'retry';
+  }
 
   // 42P01 = undefined_table, PGRST205 = not in PostgREST's schema cache.
   if (error.code === '42P01' || error.code === 'PGRST205') {
@@ -96,13 +108,13 @@ async function recordEvent(event, action, resultingTier, appUserId) {
   return 'unavailable';
 }
 
-async function markApplied(eventId) {
+async function markEvent(eventId, patch) {
   const { error } = await supabase
     .from('revenuecat_events')
-    .update({ applied: true })
+    .update(patch)
     .eq('event_id', String(eventId));
   if (error && error.code !== '42P01' && error.code !== 'PGRST205') {
-    console.error('RevenueCat webhook: could not mark applied:', error.message);
+    console.error('RevenueCat webhook: could not update event row:', error.message);
   }
 }
 
@@ -185,11 +197,27 @@ module.exports = async function handler(req, res) {
       return res.status(500).json({ error: error.message });
     }
     if (!data || data.length === 0) {
+      // Not a success: a paying user's tier was NOT set. Answer non-200 so
+      // RevenueCat marks the delivery failed and retries (5x over ~2.5h —
+      // covers a profile that is created moments after the purchase), and
+      // keep the event row (applied=false) with the reason, so a dropped
+      // purchase is visible instead of silently acknowledged. 404: the event
+      // is valid, the user it names doesn't exist here.
       console.error('RevenueCat webhook: no profile matched id ' + appUserId + ' (' + type + ')');
-      return res.status(200).json({ received: true, no_match: true });
+      if (seen === 'new' || seen === 'retry') {
+        await markEvent(event.id, {
+          applied: false,
+          note: 'no_profile_match: no profiles row for app_user_id ' + appUserId,
+        });
+      }
+      return res.status(404).json({ error: 'no_profile_match', app_user_id: appUserId });
     }
 
-    if (seen === 'new') await markApplied(event.id);
+    if (seen === 'new' || seen === 'retry') {
+      await markEvent(event.id, seen === 'retry'
+        ? { applied: true, note: 'applied on redelivery' }
+        : { applied: true });
+    }
 
     console.log('RevenueCat webhook: set user ' + appUserId + ' to ' + newTier + ' (' + type + ')');
     return res.status(200).json({ received: true, tier: newTier });
