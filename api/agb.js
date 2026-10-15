@@ -20,7 +20,7 @@ module.exports = async function(req, res) {
 </head>
 <body>
 <h1>Allgemeine Geschäftsbedingungen (AGB)</h1>
-<p>Klarer Gewinn — Stand: Juni 2026</p>
+<p>Klarer Gewinn — Stand: Oktober 2026</p>
 
 <h2>§ 1 Geltungsbereich</h2>
 <p>Diese Allgemeinen Geschäftsbedingungen (nachfolgend „AGB") gelten für alle Verträge zwischen</p>
@@ -35,9 +35,9 @@ module.exports = async function(req, res) {
 <h2>§ 2 Leistungsbeschreibung</h2>
 <p>Klarer Gewinn ist eine mobile Buchhaltungsanwendung für Selbstständige und Kleinunternehmer. Die App bietet folgende Leistungen:</p>
 <ul>
-  <li><strong>Free-Tarif:</strong> Erfassung von Einnahmen und Ausgaben, Dashboard, Steuerrechner</li>
-  <li><strong>Pro-Tarif:</strong> Zusätzlich KI-gestützter Belegscanner (GoBD-konform), KI-Assistent, EÜR-Export, automatische E-Mail-Berichte</li>
-  <li><strong>Business-Tarif:</strong> Zusätzlich Rechnungs- und Angebotserstellung, Fahrtenbuch, Verwaltung mehrerer Betriebe. (DATEV-Export in Vorbereitung.)</li>
+  <li><strong>Free-Tarif:</strong> Erfassung von Einnahmen und Ausgaben, Dashboard und Verlauf, Steuerrechner, Rechnungserstellung (einschließlich Steuernummer, IBAN und Besteuerungsart), Belegarchiv, Empfang von E-Rechnungen</li>
+  <li><strong>Pro-Tarif:</strong> Zusätzlich KI-gestützter Belegscanner (GoBD-konform), KI-Assistent mit Foto-Upload (bis zu 100 Nachrichten pro Monat), EÜR-Export (PDF, CSV, E-Mail), automatische E-Mail-Berichte</li>
+  <li><strong>Business-Tarif:</strong> Zusätzlich Angebotserstellung, Fahrtenbuch, vollständiges Firmenprofil (Logo, Adresse, Kontaktdaten), Spracheingabe im KI-Assistenten (ebenfalls bis zu 100 Nachrichten pro Monat). (DATEV-Export in Vorbereitung.)</li>
 </ul>
 <p>Der KI-Assistent liefert allgemeine Informationen zu Buchhaltungs- und Steuerthemen. Er stellt keine Steuerberatung im Sinne des Steuerberatungsgesetzes (StBerG) dar.</p>
 
